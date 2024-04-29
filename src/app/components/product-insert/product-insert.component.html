@@ -1,0 +1,19 @@
+<form [formGroup]="productForm" (ngSubmit)="submit()">
+  <ion-input
+    type="text"
+    label="ID"
+    labelPlacement="floating"
+    fill="outline"
+    formControlName="id"
+  >
+  </ion-input>
+  <ion-input
+    type="text"
+    label="Name"
+    labelPlacement="floating"
+    fill="outline"
+    formControlName="name"
+  >
+  </ion-input>
+  <ion-button type="submit">sauver</ion-button>
+</form>
