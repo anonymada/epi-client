@@ -12,27 +12,24 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { create, trash } from 'ionicons/icons';
+import { create, trash, add } from 'ionicons/icons';
+import { CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, IonIcon],
+  imports: [CommonModule, IonicModule, IonIcon, CdkDrag],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   products!: any[];
-  sub!: any;
+  subscribable!: any;
 
   @Output() productsList: EventEmitter<RxDocument> = new EventEmitter();
 
-  set edit(product: any) {
-    this.productsList.emit(product);
-  }
-
   editProduct(product: any) {
-    this.edit = product;
+    this.productsList.emit(product);
   }
 
   deleteProduct(product: any) {
@@ -40,7 +37,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   constructor(private databaseService: DatabaseService, private zone: NgZone) {
-    addIcons({ create, trash });
+    addIcons({ create, trash, add });
   }
 
   ngOnInit() {
@@ -50,13 +47,21 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   private async _listAllProducts() {
     const db = await this.databaseService.get();
     const products$ = db['products'].find().$;
-    this.sub = products$.subscribe((products: any) => {
+    this.subscribable = products$.subscribe((products: any) => {
       this.products = products;
       this.zone.run(() => {});
     });
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.subscribable.unsubscribe();
+  }
+
+  onPress(event: any) {
+    console.log('press: ', event);
+  }
+
+  onSwipe(event: any) {
+    console.log(event);
   }
 }

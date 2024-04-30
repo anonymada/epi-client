@@ -12,6 +12,9 @@ export const productSchemaLiteral = {
     name: {
       type: 'string',
     },
+    description: {
+      type: 'string',
+    },
     category: {
       type: 'string',
     },

@@ -2,30 +2,27 @@
   <ion-spinner class="app-spinner"></ion-spinner>
 </div>
 
-<ion-list *ngIf="products">
-  <ion-item *ngFor="let product of products" class="listproduct">
-    <ion-label>{{ product.id }}</ion-label>
-    <ion-label>{{ product.name }}</ion-label>
-    <button
-      ion-button
-      clear
-      icon-only
-      item-right
-      (click)="editProduct(product)"
-      color="dark"
-    >
-      <ion-icon name="create"></ion-icon>
-    </button>
-    <button
-      ion-button
-      clear
-      icon-only
-      item-right
-      (click)="deleteProduct(product)"
-      color="dark"
-    >
-      <ion-icon name="trash"></ion-icon>
-    </button>
-  </ion-item>
-  <ion-item *ngIf="products.length === 0">No products yet, insert one</ion-item>
-</ion-list>
+<ion-grid *ngIf="products">
+  <ion-row>
+    <ion-col sizeLg="3" sizeMd="4" sizeXs="4" *ngFor="let product of products">
+      <ion-card cdkDrag>
+        <ion-card-header>
+          <ion-card-title>{{ product.name }}</ion-card-title>
+          <ion-card-subtitle>{{ product.price }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <img [alt]="product.name" src="../../../assets/images/products.png" />
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col sizeLg="3" sizeMd="4" sizeXs="4">
+      <ion-card-header>
+        <ion-card-title></ion-card-title>
+        <ion-card-subtitle></ion-card-subtitle>
+      </ion-card-header>
+      <ion-card>
+        <ion-card-content> <ion-icon name="add"> </ion-icon> </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>
