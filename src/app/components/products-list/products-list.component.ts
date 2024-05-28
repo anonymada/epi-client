@@ -12,32 +12,31 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { create, trash, add } from 'ionicons/icons';
-import { CdkDrag } from '@angular/cdk/drag-drop';
+import { create, trash } from 'ionicons/icons';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { ProductDocument } from 'src/app/types/products.types';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, IonIcon, CdkDrag],
+  imports: [CommonModule, IonicModule, IonIcon, CdkDrag, CdkDropList],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   products!: any[];
+  trashbin: any[] = [1];
   subscribable!: any;
+  isTrashVisible: boolean = false;
 
-  @Output() productsList: EventEmitter<RxDocument> = new EventEmitter();
+  @Output() productsList: EventEmitter<ProductDocument> = new EventEmitter();
 
-  editProduct(product: any) {
+  editProduct(product: ProductDocument) {
     this.productsList.emit(product);
   }
 
-  deleteProduct(product: any) {
-    product.remove();
-  }
-
   constructor(private databaseService: DatabaseService, private zone: NgZone) {
-    addIcons({ create, trash, add });
+    addIcons({ create, trash });
   }
 
   ngOnInit() {
@@ -57,11 +56,24 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.subscribable.unsubscribe();
   }
 
-  onPress(event: any) {
-    console.log('press: ', event);
+  dropToDelete(event: CdkDragDrop<ProductDocument[]>) {
+    if (event.previousContainer === event.container) {
+      this.hideTrash();
+    } else {
+      event.item.data.remove();
+      this.hideTrash();
+    }
   }
 
-  onSwipe(event: any) {
-    console.log(event);
+  showTrash() {
+    this.isTrashVisible = true;
+  }
+
+  hideTrash() {
+    this.isTrashVisible = false;
+  }
+
+  colorTrash() {
+    console.log('entered');
   }
 }

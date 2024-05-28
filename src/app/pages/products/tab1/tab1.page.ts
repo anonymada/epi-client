@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 import {
   IonHeader,
   IonToolbar,
@@ -7,8 +9,8 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonFab,
 } from '@ionic/angular/standalone';
-import { ProductEditComponent } from 'src/app/components/product-edit/product-edit.component';
 import { ProductInsertComponent } from 'src/app/components/product-insert/product-insert.component';
 import { ProductsListComponent } from 'src/app/components/products-list/products-list.component';
 
@@ -18,15 +20,9 @@ import { ProductsListComponent } from 'src/app/components/products-list/products
   styleUrls: ['tab1.page.scss'],
   standalone: true,
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardContent,
+    CommonModule,
+    IonicModule,
     ProductsListComponent,
-    ProductEditComponent,
     ProductInsertComponent,
   ],
 })
