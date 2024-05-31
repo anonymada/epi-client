@@ -6,14 +6,22 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { RxDocument } from 'rxdb';
 import { DatabaseService } from '../../services/database.service';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { IonIcon } from '@ionic/angular/standalone';
+import {
+  IonIcon,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonSpinner,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { create, trash } from 'ionicons/icons';
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ProductDocument } from 'src/app/types/products.types';
 
 @Component({
@@ -21,7 +29,19 @@ import { ProductDocument } from 'src/app/types/products.types';
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, IonIcon, CdkDrag, CdkDropList],
+  imports: [
+    IonCardContent,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCardHeader,
+    IonCard,
+    CommonModule,
+    IonCol,
+    IonRow,
+    IonGrid,
+    IonIcon,
+    IonSpinner,
+  ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   products!: any[];
@@ -54,15 +74,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscribable.unsubscribe();
-  }
-
-  dropToDelete(event: CdkDragDrop<ProductDocument[]>) {
-    if (event.previousContainer === event.container) {
-      this.hideTrash();
-    } else {
-      event.item.data.remove();
-      this.hideTrash();
-    }
   }
 
   showTrash() {

@@ -1,8 +1,5 @@
 import { enableProdMode, isDevMode } from '@angular/core';
-import {
-  HAMMER_GESTURE_CONFIG,
-  bootstrapApplication,
-} from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import {
   IonicRouteStrategy,
@@ -24,7 +21,7 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes),
     provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
+      // enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
