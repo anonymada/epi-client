@@ -6,11 +6,20 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { RxDocument } from 'rxdb';
 import { DatabaseService } from '../../services/database.service';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { IonIcon } from '@ionic/angular/standalone';
+import {
+  IonIcon,
+  IonGrid,
+  IonSpinner,
+  IonRow,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonCol,
+  IonCard,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { create, trash } from 'ionicons/icons';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -21,7 +30,21 @@ import { ProductDocument } from 'src/app/types/products.types';
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, IonIcon, CdkDrag, CdkDropList],
+  imports: [
+    IonCard,
+    IonCol,
+    IonCardContent,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCardHeader,
+    IonRow,
+    IonSpinner,
+    IonGrid,
+    CommonModule,
+    IonIcon,
+    CdkDrag,
+    CdkDropList,
+  ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   products!: any[];
