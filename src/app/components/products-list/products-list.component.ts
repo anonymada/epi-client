@@ -23,6 +23,7 @@ import {
 import { addIcons } from 'ionicons';
 import { create, trash } from 'ionicons/icons';
 import { ProductDocument } from 'src/app/types/products.types';
+import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({
   selector: 'app-products-list',
@@ -30,17 +31,18 @@ import { ProductDocument } from 'src/app/types/products.types';
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     IonCardContent,
     IonCardSubtitle,
     IonCardTitle,
     IonCardHeader,
     IonCard,
-    CommonModule,
     IonCol,
     IonRow,
     IonGrid,
     IonIcon,
     IonSpinner,
+    ProductCardComponent,
   ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
@@ -76,15 +78,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.subscribable.unsubscribe();
   }
 
-  showTrash() {
-    this.isTrashVisible = true;
-  }
-
-  hideTrash() {
-    this.isTrashVisible = false;
-  }
-
-  colorTrash() {
-    console.log('entered');
+  onDoubleTap(event: any) {
+    console.log('double tap');
   }
 }

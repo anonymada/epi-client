@@ -5,12 +5,10 @@ import {
   IonicRouteStrategy,
   provideIonicAngular,
 } from '@ionic/angular/standalone';
-
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { provideServiceWorker } from '@angular/service-worker';
-
 if (environment.production) {
   enableProdMode();
 }
