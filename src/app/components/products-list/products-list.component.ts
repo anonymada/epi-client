@@ -1,13 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgPipesModule } from 'ngx-pipes';
 import {
   IonIcon,
   IonGrid,
@@ -19,11 +14,20 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonCardContent,
+  IonLabel,
+  IonItem,
+  IonFabList,
+  IonFabButton,
+  IonFab,
+  IonContent,
+  ModalController,
+  IonButton,
+  IonSearchbar,
+  IonSkeletonText,
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { create, trash } from 'ionicons/icons';
 import { ProductDocument } from 'src/app/types/products.types';
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { ProductInsertComponent } from '../product-insert/product-insert.component';
 
 @Component({
   selector: 'app-products-list',
@@ -31,7 +35,18 @@ import { ProductCardComponent } from '../product-card/product-card.component';
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
   imports: [
+    IonSkeletonText,
     CommonModule,
+    FormsModule,
+    NgPipesModule,
+    IonSearchbar,
+    IonButton,
+    IonContent,
+    IonFab,
+    IonFabButton,
+    IonFabList,
+    IonItem,
+    IonLabel,
     IonCardContent,
     IonCardSubtitle,
     IonCardTitle,
@@ -43,42 +58,34 @@ import { ProductCardComponent } from '../product-card/product-card.component';
     IonIcon,
     IonSpinner,
     ProductCardComponent,
+    ProductInsertComponent,
   ],
 })
-export class ProductsListComponent implements OnInit, OnDestroy {
-  products!: any[];
-  trashbin: any[] = [1];
-  subscribable!: any;
-  isTrashVisible: boolean = false;
+export class ProductsListComponent implements OnInit {
+  products!: any;
+  totalProducts!: number;
+  searchTerm!: string;
 
-  @Output() productsList: EventEmitter<ProductDocument> = new EventEmitter();
+  constructor(
+    private databaseService: DatabaseService,
+    private editModalController: ModalController
+  ) {}
 
-  editProduct(product: ProductDocument) {
-    this.productsList.emit(product);
-  }
-
-  constructor(private databaseService: DatabaseService, private zone: NgZone) {
-    addIcons({ create, trash });
-  }
-
-  ngOnInit() {
-    this._listAllProducts();
-  }
-
-  private async _listAllProducts() {
+  async ngOnInit() {
     const db = await this.databaseService.get();
-    const products$ = db['products'].find().$;
-    this.subscribable = products$.subscribe((products: any) => {
-      this.products = products;
-      this.zone.run(() => {});
+    db.products.listAllProducts().subscribe((p) => {
+      this.products = p;
     });
   }
 
-  ngOnDestroy(): void {
-    this.subscribable.unsubscribe();
-  }
-
-  onDoubleTap(event: any) {
-    console.log('double tap');
+  async showEditProduct(product: ProductDocument) {
+    const editModal = await this.editModalController.create({
+      component: ProductInsertComponent,
+      componentProps: {
+        item: product,
+        isAdd: false,
+      },
+    });
+    editModal.present();
   }
 }

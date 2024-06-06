@@ -1,18 +1,27 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
   ViewChild,
-  AfterViewInit,
   Input,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import {
-  GestureController,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
   IonCardSubtitle,
+  IonModal,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonHeader,
+  IonTitle,
+  IonContent,
 } from '@ionic/angular/standalone';
+import { LongpressDirective } from 'src/app/directives/longpress.directive';
 
 @Component({
   selector: 'app-product-card',
@@ -20,57 +29,31 @@ import {
   styleUrls: ['./product-card.component.scss'],
   standalone: true,
   imports: [
+    IonContent,
+    IonTitle,
+    IonHeader,
+    IonButton,
+    IonButtons,
+    IonToolbar,
+    IonModal,
     IonCardSubtitle,
     IonCardTitle,
     IonCardHeader,
     IonCard,
     IonCardContent,
+    LongpressDirective,
+    CommonModule,
   ],
 })
-export class ProductCardComponent implements AfterViewInit {
+export class ProductCardComponent {
   @ViewChild('card', { read: ElementRef })
   card!: ElementRef<HTMLIonCardElement>;
-  @Input() productName: any;
-  @Input() productPrice: any;
+  @Input() item: any;
+  @Output() LongPress = new EventEmitter();
 
-  private currentOffset: number = 0;
-  private lastOnStart: number = 0;
-  private DOUBLE_CLICK_THRESHOLD: number = 500;
+  constructor(private el: ElementRef) {}
 
-  constructor(private el: ElementRef, private gestureCtrl: GestureController) {}
-
-  ngAfterViewInit() {
-    const gesture = this.gestureCtrl.create({
-      el: this.card.nativeElement,
-      threshold: 0,
-      onStart: () => this.onStart(),
-      gestureName: 'double-click',
-    });
-
-    gesture.enable();
-  }
-
-  private onStart() {
-    const now = Date.now();
-
-    if (Math.abs(now - this.lastOnStart) <= this.DOUBLE_CLICK_THRESHOLD) {
-      this.card.nativeElement.style.setProperty(
-        'transform',
-        this.getNewTransform()
-      );
-      this.lastOnStart = 0;
-    } else {
-      this.lastOnStart = now;
-    }
-  }
-
-  private getNewTransform() {
-    if (this.currentOffset >= 100) {
-      this.currentOffset = 0;
-    } else {
-      this.currentOffset += 20;
-    }
-
-    return `translateX(${this.currentOffset}px)`;
+  onLongPress() {
+    this.LongPress.emit();
   }
 }

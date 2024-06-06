@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { addRxPlugin, createRxDatabase, RxJsonSchema } from 'rxdb';
+import { addRxPlugin, createRxDatabase, RxDocument, RxJsonSchema } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import {
   Database,
   ProductCollection,
   ProductCollectionMethods,
   ProductDocMethods,
+  ProductDocument,
   productSchema,
 } from '../types/products.types';
 import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
+import { BehaviorSubject } from 'rxjs';
 addRxPlugin(RxDBLeaderElectionPlugin);
 
 @Injectable({
@@ -38,9 +40,31 @@ export class DatabaseService {
     const productDocMethods: ProductDocMethods = {};
 
     const productCollectionMethods: ProductCollectionMethods = {
-      countAllDocuments: async function (this: ProductCollection) {
+      countAllProducts: async function (this: ProductCollection) {
         const allDocs = await this.find().exec();
         return allDocs.length;
+      },
+
+      listAllProducts: function (this: ProductCollection) {
+        return this.find().$;
+      },
+
+      insertProduct: function (
+        this: ProductCollection,
+        newProduct: ProductDocument
+      ): Promise<ProductDocument> {
+        return this.insert(newProduct);
+      },
+
+      updateProduct: function (
+        this: ProductCollection,
+        p: ProductDocument
+      ): Promise<ProductDocument> {
+        return this.upsert(p);
+      },
+
+      deleteProduct: function (p: ProductDocument): Promise<any> {
+        return p.remove();
       },
     };
 
@@ -82,14 +106,11 @@ export class DatabaseService {
         productCollection.products.name
     );
 
-    console.log(await db.products.countAllDocuments());
     return db;
   }
 
   get(): Promise<Database> {
     if (DatabaseService.dbPromise) return DatabaseService.dbPromise;
-
-    // create database
     DatabaseService.dbPromise = this._create();
     return DatabaseService.dbPromise;
   }

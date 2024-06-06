@@ -1,7 +1,34 @@
-<div class="loading" *ngIf="!products">
-  <ion-spinner class="app-spinner"></ion-spinner>
-</div>
-
+<ion-searchbar placeholder="Search" [(ngModel)]="searchTerm" animated="true">
+</ion-searchbar>
+<ion-grid *ngIf="!products">
+  <ion-row>
+    <ion-col
+      size="12"
+      size-xs="4"
+      size-sm="3"
+      size-md="2"
+      size-lg="2"
+      *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+    >
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-card-title>
+          <ion-card-subtitle
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-skeleton-text
+            [animated]="true"
+            style="height: 25px"
+          ></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 <ion-grid>
   <ion-row>
     <ion-col
@@ -10,23 +37,12 @@
       size-sm="3"
       size-md="2"
       size-lg="2"
-      *ngFor="let product of products"
+      *ngFor="let product of products | filterBy : ['name'] : this.searchTerm"
     >
       <app-product-card
-        [productName]="product.name"
-        [productPrice]="product.price"
+        [item]="product"
+        (LongPress)="showEditProduct(product)"
       ></app-product-card>
-    </ion-col>
-
-    <ion-col size="12" size-xs="4" size-sm="3" size-md="2" size-lg="2">
-      <!-- <ion-card>
-        <ion-card-header>
-          <ion-card-title> Add</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <img alt="add icon" src="../../../assets/images/add.png" />
-        </ion-card-content>
-      </ion-card> -->
     </ion-col>
   </ion-row>
 </ion-grid>
