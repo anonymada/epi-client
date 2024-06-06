@@ -1,52 +1,48 @@
-<div class="loading" *ngIf="!products">
-  <ion-spinner class="app-spinner"></ion-spinner>
-</div>
-
-<ion-grid *ngIf="products">
+<ion-searchbar placeholder="Search" [(ngModel)]="searchTerm" animated="true">
+</ion-searchbar>
+<ion-grid *ngIf="!products">
   <ion-row>
     <ion-col
-      id="products"
-      cdkDropList
-      [cdkDropListData]="products"
-      cdkDropListConnectedTo="trashbin"
-      sizeLg="2"
-      sizeMd="4"
-      sizeXs="4"
-      *ngFor="let product of products; track: product"
+      size="12"
+      size-xs="4"
+      size-sm="3"
+      size-md="2"
+      size-lg="2"
+      *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
     >
-      <ion-card [cdkDragData]="product" (cdkDragMoved)="showTrash()" cdkDrag>
-        <ion-card-header>
-          <ion-card-title>{{ product.name }}</ion-card-title>
-          <ion-card-subtitle>{{ product.price }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <img [alt]="product.name" src="../../../assets/images/products.png" />
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-
-    <ion-col sizeLg="2" sizeMd="4" sizeXs="4">
       <ion-card>
         <ion-card-header>
-          <ion-card-title> Add</ion-card-title>
-          <ion-card-subtitle> products</ion-card-subtitle>
+          <ion-card-title
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-card-title>
+          <ion-card-subtitle
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <img alt="add icon" src="../../../assets/images/add.png" />
+          <ion-skeleton-text
+            [animated]="true"
+            style="height: 25px"
+          ></ion-skeleton-text>
         </ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
 </ion-grid>
-
-<div *ngIf="isTrashVisible">
-  <div
-    class="floating"
-    id="trashbin"
-    cdkDropList
-    [cdkDropListData]="trashbin"
-    cdkDropListConnectedTo="products"
-    (cdkDropListDropped)="dropToDelete($event)"
-    *ngFor="let trash of trashbin; track: trash"
-  ></div>
-</div>
+<ion-grid>
+  <ion-row>
+    <ion-col
+      size="12"
+      size-xs="4"
+      size-sm="3"
+      size-md="2"
+      size-lg="2"
+      *ngFor="let product of products | filterBy : ['name'] : this.searchTerm"
+    >
+      <app-product-card
+        [item]="product"
+        (LongPress)="showEditProduct(product)"
+      ></app-product-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>

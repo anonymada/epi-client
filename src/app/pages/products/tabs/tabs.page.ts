@@ -8,7 +8,6 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { triangle, ellipse, square } from 'ionicons/icons';
-import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'app-tabs',
@@ -20,8 +19,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
 
-  constructor(private databaseService: DatabaseService) {
+  constructor() {
     addIcons({ triangle, ellipse, square });
-    databaseService.get();
   }
 }
