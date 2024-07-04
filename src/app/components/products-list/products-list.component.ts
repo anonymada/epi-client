@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +28,8 @@ import {
 import { ProductDocument } from 'src/app/types/products.types';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductInsertComponent } from '../product-insert/product-insert.component';
+import { addIcons } from 'ionicons';
+import { trashBin } from 'ionicons/icons';
 
 @Component({
   selector: 'app-products-list',
@@ -62,18 +64,22 @@ import { ProductInsertComponent } from '../product-insert/product-insert.compone
   ],
 })
 export class ProductsListComponent implements OnInit {
-  products!: any;
+  products!: ProductDocument[];
   totalProducts!: number;
   searchTerm!: string;
+  productToDelete: string[] = [];
+  isTrashBinVisible: boolean = false;
 
   constructor(
     private databaseService: DatabaseService,
     private editModalController: ModalController
-  ) {}
+  ) {
+    addIcons({ trashBin });
+  }
 
   async ngOnInit() {
     const db = await this.databaseService.get();
-    db.products.listAllProducts().subscribe((p) => {
+    db.products.listAllProducts().subscribe((p: ProductDocument[]) => {
       this.products = p;
     });
   }
@@ -87,5 +93,31 @@ export class ProductsListComponent implements OnInit {
       },
     });
     editModal.present();
+  }
+
+  selectProductToDelete(item: ProductDocument) {
+    if (!this.productToDelete.includes(item.id)) {
+      this.productToDelete.push(item.id);
+    } else {
+      this.productToDelete = this.productToDelete.filter(
+        (productId) => productId != item.id
+      );
+    }
+    if (this.productToDelete.length != 0) {
+      this.isTrashBinVisible = true;
+    } else {
+      this.isTrashBinVisible = false;
+    }
+  }
+
+  async bulkDelete() {
+    const db = await this.databaseService.get();
+    db.products.bulkDeleteProduct(this.productToDelete).then((val) => {
+      if (val.error.length == 0) {
+        this.isTrashBinVisible = false;
+      } else {
+        // error handling
+      }
+    });
   }
 }

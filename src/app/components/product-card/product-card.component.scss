@@ -1,15 +1,16 @@
 .card {
     width: 100%;
-    height: 90%;
+    height: 100%;
     margin: 0px;
-    margin-top: 5%;
-    margin-bottom: 5%;
-    box-shadow: 1px 1px 5px rgb(52, 62, 70);
+    margin-top: 2%;
+    margin-bottom: 2%;
+    background-color: var(--ion-color-light);
+    box-shadow: 1px 1px 1px rgb(52, 62, 70);
     display: inline-block;
 }
 
-.img{
-    width:100%;
-    height:45%;
-    background-color: rgba(58, 57, 66, 0.555);
+ion-thumbnail {
+    width: 100%;
+    --border-radius:4px;
 }
+

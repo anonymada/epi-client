@@ -1,0 +1,113 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="12">
+      <ion-input #ionInputEl fill="outline" placeholder="0" disabled="true">
+      </ion-input>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="6">
+      <ion-button color="danger" type="ion-button" (click)="allClear()">
+        C
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="warning" type="ion-button" (click)="clear()">
+        <ion-icon name="backspace"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressOperator('/')">
+        /
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('7')">
+        7
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('8')">
+        8
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('9')">
+        9
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressOperator('*')">
+        X
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('4')">
+        4
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('5')">
+        5
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('6')">
+        6
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressOperator('-')">
+        -
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('1')">
+        1
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('2')">
+        2
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('3')">
+        3
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressOperator('+')">
+        +
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('.')">
+        .
+      </ion-button>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button color="light" type="ion-button" (click)="pressNum('0')">
+        0
+      </ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button color="primary" pe="ion-button" (click)="getAnswer()">
+        =
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>

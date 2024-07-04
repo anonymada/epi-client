@@ -1,92 +1,311 @@
 <ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-button slot="start" type="button" fill="clear" (click)="close()">
-      <ion-icon name="close" slot="icon-only" color="dark"></ion-icon>
+    <ion-button
+      slot="start"
+      type="button"
+      color="dark"
+      fill="clear"
+      (click)="close()"
+    >
+      <ion-icon size="large" name="close" slot="icon-only"></ion-icon>
     </ion-button>
-    <ng-container *ngIf="isAdd; else edit">
-      <ion-title class="ion-text-center">Add</ion-title>
+    <ng-container *ngIf="isAdd; else edit0">
+      <ion-title class="ion-text-center">Ajouter</ion-title>
     </ng-container>
-    <ng-template #edit>
-      <ion-title class="ion-text-center">{{ item.name }}</ion-title>
+    <ng-template #edit0>
+      <ion-title class="ion-text-center">Editer</ion-title>
     </ng-template>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <form [formGroup]="productForm" (ngSubmit)="save()">
+    <ion-input type="text" label="ID" formControlName="id" *ngIf="false">
+    </ion-input>
+    <ion-accordion-group value="first">
+      <ion-accordion value="first">
+        <ion-item slot="header">
+          <ng-container *ngIf="isAdd; else edit1">
+            <ion-thumbnail>
+              <img
+                id="productImageElt"
+                src="../../../assets/images/products.png"
+              />
+            </ion-thumbnail>
+            <ion-title class="ion-text-center">Produit</ion-title>
+          </ng-container>
+          <ng-template #edit1>
+            <ion-thumbnail>
+              <img id="productImageElt" />
+            </ion-thumbnail>
+            <ion-title class="ion-text-center">{{ item.name }}</ion-title>
+          </ng-template>
+        </ion-item>
+        <div slot="content">
+          <ion-grid>
+            <!-- photo -->
+            <ion-row>
+              <ion-item>
+                <ion-col class="ion-text-center">
+                  <app-photo (newPhoto)="changePhoto($event)"></app-photo>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+            <!-- name -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Nom : </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input type="text" fill="outline" formControlName="name">
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+
+            <!-- description -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Description : </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-textarea
+                    [autoGrow]="true"
+                    fill="outline"
+                    formControlName="description"
+                  >
+                  </ion-textarea>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+
+            <!-- category -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Catégorie : </ion-label>
+                </ion-col>
+                <ion-col>
+                  <input
+                    id="category"
+                    list="categoryList"
+                    fill="outline"
+                    formControlName="category"
+                  />
+                  <datalist id="categoryList">
+                    <select>
+                      <option
+                        *ngFor="let category of productCategory"
+                        [value]="category"
+                      >
+                        {{ category }}
+                      </option>
+                    </select>
+                  </datalist>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+
+            <!-- conditionningType -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Unité :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <input
+                    id="conditionningType"
+                    list="conditionningList"
+                    fill="outline"
+                    formControlName="conditionningType"
+                  />
+                  <datalist id="conditionningList">
+                    <select>
+                      <option
+                        *ngFor="
+                          let conditionningType of productConditionningType
+                        "
+                        [value]="conditionningType"
+                      >
+                        {{ conditionningType }}
+                      </option>
+                    </select>
+                  </datalist>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-accordion>
+      <ion-accordion value="second">
+        <ion-item slot="header">
+          <ion-thumbnail>
+            <img src="../../../assets/images/money.png" />
+          </ion-thumbnail>
+          <ion-title class="ion-text-center">Prix</ion-title>
+        </ion-item>
+        <div slot="content">
+          <ion-grid>
+            <!-- buying price -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Achat :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input
+                    #buyingPrice
+                    type="number"
+                    fill="outline"
+                    formControlName="buyingPrice"
+                  >
+                    <ion-button
+                      id="buyingPrice"
+                      fill="clear"
+                      slot="end"
+                      (click)="calculateField($event, 'buyingPrice')"
+                    >
+                      <ion-icon
+                        slot="icon-only"
+                        name="calculator"
+                        aria-hidden="true"
+                      ></ion-icon>
+                    </ion-button>
+                    <ion-popover trigger="buyingPrice" triggerAction="click">
+                      <ng-template>
+                        <ion-content class="ion-padding">
+                          <app-calculator
+                            (calculatorResult)="
+                              calculateField($event, 'buyingPrice')
+                            "
+                          >
+                          </app-calculator>
+                        </ion-content>
+                      </ng-template>
+                    </ion-popover>
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+            <!-- sellingPrice -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Vente :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input
+                    #sellingPrice
+                    type="number"
+                    fill="outline"
+                    formControlName="sellingPrice"
+                  >
+                    <!-- (click)="calculateField('sellingPrice')" -->
+                    <ion-button id="sellingPrice" fill="clear" slot="end">
+                      <ion-icon
+                        slot="icon-only"
+                        name="calculator"
+                        aria-hidden="true"
+                      ></ion-icon>
+                    </ion-button>
+                    <ion-popover trigger="sellingPrice" triggerAction="click">
+                      <ng-template>
+                        <ion-content class="ion-padding">
+                          <app-calculator
+                            (calculatorResult)="
+                              calculateField($event, 'sellingPrice')
+                            "
+                          ></app-calculator>
+                        </ion-content>
+                      </ng-template>
+                    </ion-popover>
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+            <!-- profitMargin -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Marge :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input
+                    type="number"
+                    fill="outline"
+                    (ionFocus)="calculateProfitMargin($event)"
+                    formControlName="profitMargin"
+                  >
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-accordion>
+      <ion-accordion value="third">
+        <ion-item slot="header">
+          <ion-thumbnail>
+            <img src="../../../assets/images/stock.png" />
+          </ion-thumbnail>
+          <ion-title class="ion-text-center">Quantité</ion-title>
+        </ion-item>
+        <div slot="content">
+          <ion-grid>
+            <!-- stockQuantity -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Stock :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input
+                    type="number"
+                    fill="outline"
+                    formControlName="stockQuantity"
+                  >
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+            <!-- supplyQuantity -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Commande :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input
+                    type="number"
+                    fill="outline"
+                    formControlName="supplyQuantity"
+                  >
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+            <!-- soldQuantity -->
+            <ion-row>
+              <ion-item>
+                <ion-col size="4">
+                  <ion-label>Vente :</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input
+                    type="number"
+                    fill="outline"
+                    formControlName="soldQuantity"
+                  >
+                  </ion-input>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
     <ion-grid>
-      <ion-row>
-        <ion-col>
-          <img
-            src="../../../assets/images/products.png"
-            style="width: 100%; height: 30%"
-          />
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-input type="text" label="ID" formControlName="id"> </ion-input>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-input
-            type="text"
-            label="Name"
-            labelPlacement="floating"
-            fill="outline"
-            formControlName="name"
-          >
-          </ion-input>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-input
-            type="text"
-            label="Name"
-            labelPlacement="floating"
-            fill="outline"
-            formControlName="name"
-          >
-          </ion-input>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-input
-            type="text"
-            label="Name"
-            labelPlacement="floating"
-            fill="outline"
-            formControlName="name"
-          >
-          </ion-input>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-input
-            type="text"
-            label="Name"
-            labelPlacement="floating"
-            fill="outline"
-            formControlName="name"
-          >
-          </ion-input>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-input
-            type="text"
-            label="Name"
-            labelPlacement="floating"
-            fill="outline"
-            formControlName="name"
-          >
-          </ion-input>
-        </ion-col>
-      </ion-row>
       <ion-row>
         <ion-col class="ion-text-end">
           <ion-button
@@ -105,11 +324,10 @@
   <ion-toolbar color="primary">
     <ion-button
       size="large"
-      slot="icon-only"
-      color="dark"
       slot="end"
       type="button"
       fill="clear"
+      color="dark"
       (click)="delete(item)"
       *ngIf="!isAdd"
     >

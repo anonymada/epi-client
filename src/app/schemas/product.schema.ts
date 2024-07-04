@@ -18,10 +18,31 @@ export const productSchemaLiteral = {
     category: {
       type: 'string',
     },
-    price: {
+    conditionningType: {
+      type: 'string',
+    },
+    buyingPrice: {
+      type: 'number',
+    },
+    sellingPrice: {
+      type: 'number',
+    },
+    profitMargin: {
+      type: 'number',
+    },
+    stockQuantity: {
+      type: 'number',
+    },
+    supplyQuantity: {
+      type: 'number',
+    },
+    soldQuantity: {
       type: 'number',
     },
   },
-  required: ['id'],
-  indexes: ['name'],
+  attachments: {
+    encrypted: false,
+  },
+  required: ['id', 'name'],
+  indexes: ['id'],
 } as const; // <- It is important to set 'as const' to preserve the literal type

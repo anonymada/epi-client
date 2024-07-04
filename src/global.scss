@@ -35,6 +35,7 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+@import 'animate.css';
 
 html {
     --ion-dynamic-font: var(--ion-dynamic-font);
@@ -42,43 +43,43 @@ html {
     font-size: 100%;
     
     @media (max-width: 289px) {
-        font-size: 45%;
+        font-size: 60%;
     }
 
     @media (min-width: 290px) {
-        font-size: 50%;
-    }
-
-    @media (min-width: 300px) {
-        font-size: 52.5%;
-    }
-
-    @media (min-width: 320px) {
-        font-size: 55.5%;
-    }
-
-    @media (min-width: 325px) {
-        font-size: 56.5%;
-    }
-
-    @media (min-width: 326px) {
-        font-size: 57%;
-    }
-
-    @media (min-width: 330px) {
-        font-size: 59%;
-    }
-
-    @media (min-width: 360px) {
         font-size: 62.5%;
     }
 
+    @media (min-width: 300px) {
+        font-size: 65.5%;
+    }
+
+    @media (min-width: 320px) {
+        font-size: 67.5%;
+    }
+
+    @media (min-width: 325px) {
+        font-size: 69.5%;
+    }
+
+    @media (min-width: 326px) {
+        font-size: 70.5%;
+    }
+
+    @media (min-width: 330px) {
+        font-size: 72.5%;
+    }
+
+    @media (min-width: 360px) {
+        font-size: 74.5%;
+    }
+
     @media (min-width: 411px) {
-        font-size: 70%;
+        font-size: 80%;
     }
 
     @media (min-width: 500px) {
-        font-size: 85%;
+        font-size: 95%;
     }
 
     @media (min-width: 720px) {

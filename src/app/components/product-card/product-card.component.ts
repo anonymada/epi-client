@@ -6,9 +6,12 @@ import {
   Input,
   Output,
   EventEmitter,
+  OnInit,
+  Renderer2,
 } from '@angular/core';
 import {
   IonCard,
+  IonThumbnail,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
@@ -22,6 +25,8 @@ import {
   IonContent,
 } from '@ionic/angular/standalone';
 import { LongpressDirective } from 'src/app/directives/longpress.directive';
+import { ProductDocument } from 'src/app/types/products.types';
+import 'animate.css';
 
 @Component({
   selector: 'app-product-card',
@@ -35,6 +40,7 @@ import { LongpressDirective } from 'src/app/directives/longpress.directive';
     IonButton,
     IonButtons,
     IonToolbar,
+    IonThumbnail,
     IonModal,
     IonCardSubtitle,
     IonCardTitle,
@@ -45,15 +51,34 @@ import { LongpressDirective } from 'src/app/directives/longpress.directive';
     CommonModule,
   ],
 })
-export class ProductCardComponent {
-  @ViewChild('card', { read: ElementRef })
-  card!: ElementRef<HTMLIonCardElement>;
-  @Input() item: any;
-  @Output() LongPress = new EventEmitter();
+export class ProductCardComponent implements OnInit {
+  @Input() item!: ProductDocument;
+  @Input() cardId!: string;
+  @Output() shortPress = new EventEmitter();
+  @Output() longPress = new EventEmitter();
 
-  constructor(private el: ElementRef) {}
+  productImage: string = '../../../assets/images/products.png';
+  selectedCard: boolean = false;
+
+  constructor() {}
+
+  ngOnInit() {
+    this.item.getImage(this.item.id).then((image) => {
+      this.productImage = image;
+    });
+    this.selectedCard = false;
+  }
+
+  onPress() {
+    this.shortPress.emit();
+  }
 
   onLongPress() {
-    this.LongPress.emit();
+    if (!this.selectedCard) {
+      this.selectedCard = true;
+    } else {
+      this.selectedCard = false;
+    }
+    this.longPress.emit();
   }
 }

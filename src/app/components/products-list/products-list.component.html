@@ -41,8 +41,18 @@
     >
       <app-product-card
         [item]="product"
-        (LongPress)="showEditProduct(product)"
+        [cardId]="product.id"
+        (shortPress)="showEditProduct(product)"
+        (longPress)="selectProductToDelete(product)"
       ></app-product-card>
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<div class="floating-div center" *ngIf="isTrashBinVisible">
+  <ion-fab>
+    <ion-fab-button (click)="bulkDelete()">
+      <ion-icon name="trash-bin"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</div>

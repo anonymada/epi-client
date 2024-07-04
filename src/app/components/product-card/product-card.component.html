@@ -1,14 +1,17 @@
 <ion-card
-  #card
+  id="{{ cardId }}"
   appLongpress
   (press)="onLongPress()"
-  class="card"
-  color="tertiary"
+  (click)="onPress()"
+  [ngClass]="
+    selectedCard ? 'animate__animated animate__pulse animate__infinite' : 'card'
+  "
 >
-  <img class="img" src="../../../assets/images/products.png" />
   <ion-card-header>
-    <ion-card-title class="ion-text-wrap">{{ item.name }}</ion-card-title>
-    <ion-card-subtitle>{{ item.price }}</ion-card-subtitle>
+    <ion-thumbnail> <img src="{{ productImage }}" /> </ion-thumbnail>
   </ion-card-header>
-  <ion-card-content> </ion-card-content>
+  <ion-card-content>
+    <ion-card-title class="ion-text-wrap">{{ item.name }}</ion-card-title>
+    <ion-card-subtitle>Ar {{ item.sellingPrice }}</ion-card-subtitle>
+  </ion-card-content>
 </ion-card>
