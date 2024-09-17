@@ -1,30 +1,41 @@
 import { Injectable } from '@angular/core';
-import {
-  RxJsonSchema,
-  addRxPlugin,
-  blobToBase64String,
-  blobToString,
-  createBlob,
-  createRxDatabase,
-} from 'rxdb';
+import { addRxPlugin, blobToString, createBlob, createRxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
+import { RxDBMigrationPlugin } from 'rxdb/plugins/migration-schema';
+import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
+import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
+import { BehaviorSubject } from 'rxjs';
+import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments';
 import {
   Database,
   ProductCollection,
   ProductCollectionMethods,
   ProductDocMethods,
   ProductDocument,
-  productSchema,
-} from '../types/products.types';
-import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
-import { RxDBMigrationPlugin } from 'rxdb/plugins/migration-schema';
-import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
-import { BehaviorSubject } from 'rxjs';
-import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments';
+  QuantityCollection,
+  QuantityCollectionMethods,
+  QuantityDocMethods,
+  QuantityDocument,
+  PriceCollection,
+  PriceCollectionMethods,
+  PriceDocMethods,
+  PriceDocument,
+  PriceSchema,
+  ProductSchema,
+  QuantitySchema,
+  DatabaseCollections,
+} from '../types/app.types';
+import { formatDate } from '@angular/common';
+
 addRxPlugin(RxDBAttachmentsPlugin);
 addRxPlugin(RxDBJsonDumpPlugin);
 addRxPlugin(RxDBLeaderElectionPlugin);
 addRxPlugin(RxDBMigrationPlugin);
+addRxPlugin(RxDBQueryBuilderPlugin);
+
+const ID_PARTS = 4;
+const DATE_NOW = formatDate(Date.now(), 'yyyy-MM-dd HH:mm:ss', 'en');
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +46,7 @@ export class DatabaseService {
   constructor() {}
 
   private async _create(): Promise<Database> {
+    // database initialization
     console.log('DatabaseService >> creating database..');
 
     const db: Database = await createRxDatabase({
@@ -47,9 +59,10 @@ export class DatabaseService {
 
     // show leadership in title
     db.waitForLeadership().then(() => {
-      document.title = '♛ ' + document.title;
+      document.title = '🛍️ ' + document.title;
     });
 
+    // definition of collections and dcouments methods
     const productDocMethods: ProductDocMethods = {
       addImage: function (
         this: ProductDocument,
@@ -130,81 +143,135 @@ export class DatabaseService {
       bulkDeleteProduct: function (ids: string[]): Promise<any> {
         return db.products.bulkRemove(ids);
       },
+
+      generateProductId: function (): string {
+        const stringArr = [];
+        for (let i = 0; i < ID_PARTS; i++) {
+          // tslint:disable-next-line:no-bitwise
+          const S4 = (((1 + Math.random()) * 0x10000) | 0)
+            .toString(16)
+            .substring(1);
+          stringArr.push(S4);
+        }
+        return stringArr.join('-');
+      },
     };
 
-    // const productSchema: RxJsonSchema<ProductDocType> = {
-    //   title: 'product schema',
-    //   description: 'describes a product',
-    //   version: 0,
-    //   primaryKey: 'id',
-    //   type: 'object',
-    //   properties: {
-    //     id: {
-    //       type: 'string',
-    //       maxLength: 100, // <- the primary key must have set maxLength
-    //     },
-    //     name: {
-    //       type: 'string',
-    //     },
-    //     description: {
-    //       type: 'string',
-    //     },
-    //     category: {
-    //       type: 'string',
-    //     },
-    //     conditionningType: {
-    //       type: 'string',
-    //     },
-    //     buyingPrice: {
-    //       type: 'number',
-    //     },
-    //     sellingPrice: {
-    //       type: 'number',
-    //     },
-    //     profitMargin: {
-    //       type: 'number',
-    //     },
-    //     stockQuantity: {
-    //       type: 'number',
-    //     },
-    //     supplyQuantity: {
-    //       type: 'number',
-    //     },
-    //     soldQuantity: {
-    //       type: 'number',
-    //     },
-    //   },
-    //   required: [
-    //     'id',
-    //     'name',
-    //     'conditionningType',
-    //     'buyingPrice',
-    //     'sellingPrice',
-    //     'supplyQuantity',
-    //   ],
-    //   indexes: ['name'],
-    // };
+    const quantityDocMethods: QuantityDocMethods = {};
 
-    // create collections
+    const quantityCollectionMethods: QuantityCollectionMethods = {
+      insertQuantity: function (
+        this: QuantityCollection,
+        q: QuantityDocument
+      ): Promise<QuantityDocument> {
+        const Q = Object.keys(QuantitySchema.properties).reduce(
+          (o, key) => Object.assign(o, { [key]: q[key as keyof typeof q] }),
+          {}
+        ) as QuantityDocument;
+        Q.quantityRegisteredDate = DATE_NOW;
+        return this.insert(Q);
+      },
+
+      generateQuantityId: function (): string {
+        const stringArr = [];
+        for (let i = 0; i < ID_PARTS; i++) {
+          // tslint:disable-next-line:no-bitwise
+          const S4 = (((1 + Math.random()) * 0x10000) | 0)
+            .toString(16)
+            .substring(1);
+          stringArr.push(S4);
+        }
+        return stringArr.join('-');
+      },
+
+      getProductQuantities: function (
+        this: QuantityCollection,
+        p: ProductDocument
+      ): Promise<QuantityDocument[]> {
+        return this.find()
+          .where('idProduct')
+          .eq(p.idProduct)
+          .sort('quantityRegisteredDate')
+          .exec();
+      },
+    };
+
+    const priceDocMethods: PriceDocMethods = {};
+
+    const priceCollectionMethods: PriceCollectionMethods = {
+      insertPrice: function (
+        this: PriceCollection,
+        p: PriceDocument
+      ): Promise<PriceDocument> {
+        const P = Object.keys(PriceSchema.properties).reduce(
+          (o, key) => Object.assign(o, { [key]: p[key as keyof typeof p] }),
+          {}
+        ) as PriceDocument;
+        P.priceRegisteredDate = DATE_NOW;
+        return this.insert(P);
+      },
+
+      generatePriceId: function (): string {
+        const stringArr = [];
+        for (let i = 0; i < ID_PARTS; i++) {
+          // tslint:disable-next-line:no-bitwise
+          const S4 = (((1 + Math.random()) * 0x10000) | 0)
+            .toString(16)
+            .substring(1);
+          stringArr.push(S4);
+        }
+        return stringArr.join('-');
+      },
+
+      getProductPrices: function (
+        this: PriceCollection,
+        p: ProductDocument
+      ): Promise<PriceDocument[]> {
+        return this.find()
+          .where('idProduct')
+          .eq(p.idProduct)
+          .sort('priceRegisteredDate')
+          .exec();
+      },
+    };
+
+    // add database collections
     console.log('DatabaseService >> creating collections ...');
-    const productCollection = await db.addCollections({
+
+    const collection = await db.addCollections({
       products: {
-        schema: productSchema,
+        schema: ProductSchema,
         methods: productDocMethods,
         statics: productCollectionMethods,
-        migrationStrategies: {
-          1: function (oldDoc) {
-            return oldDoc;
-          },
-        },
+        // migrationStrategies: {
+        //   1: function (oldDoc) {
+        //     return oldDoc;
+        //   },
+        // },
+      },
+      prices: {
+        schema: PriceSchema,
+        methods: priceDocMethods,
+        statics: priceCollectionMethods,
+      },
+      quantities: {
+        schema: QuantitySchema,
+        methods: quantityDocMethods,
+        statics: quantityCollectionMethods,
       },
     });
+
     console.log(
       'DatabaseService >> created collections  : ' +
-        productCollection.products.name
+        collection.products.name +
+        ', ' +
+        collection.prices.name +
+        ', ' +
+        collection.quantities.name
     );
-    // productCollection.products.exportJSON().then((json) => console.dir(json));
-    // db.products.calculateFields();
+
+    // collection.prices.exportJSON().then((json) => console.dir(json));
+
     return db;
   }
 

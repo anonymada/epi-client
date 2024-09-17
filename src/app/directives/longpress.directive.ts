@@ -15,7 +15,7 @@ import { GestureController } from '@ionic/angular/standalone';
 })
 export class LongpressDirective implements AfterViewInit {
   @Output() press = new EventEmitter();
-  @Input() delay = 1000;
+  @Input() delay = 800;
   action: any; //not stacking actions
 
   private longPressActive = false;

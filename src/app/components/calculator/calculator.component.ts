@@ -51,7 +51,6 @@ export class CalculatorComponent implements OnInit {
     if (num == '.') {
       if (this.input != '') {
         const lastNum = this.getLastOperand();
-        console.log(lastNum.lastIndexOf('.'));
         if (lastNum.lastIndexOf('.') >= 0) return;
       }
     }
@@ -80,7 +79,6 @@ export class CalculatorComponent implements OnInit {
 
   getLastOperand() {
     let pos: number;
-    console.log(this.input);
     pos = this.input.toString().lastIndexOf('+');
     if (this.input.toString().lastIndexOf('-') > pos)
       pos = this.input.lastIndexOf('-');
@@ -88,7 +86,6 @@ export class CalculatorComponent implements OnInit {
       pos = this.input.lastIndexOf('*');
     if (this.input.toString().lastIndexOf('/') > pos)
       pos = this.input.lastIndexOf('/');
-    console.log('Last ' + this.input.substr(pos + 1));
     return this.input.substr(pos + 1);
     this.ionInputEl.value = this.input;
   }
@@ -144,7 +141,6 @@ export class CalculatorComponent implements OnInit {
       formula = formula.substr(0, formula.length - 1);
     }
 
-    console.log('Formula ' + formula);
     this.result = eval(formula);
     this.ionInputEl.value = this.input;
   }

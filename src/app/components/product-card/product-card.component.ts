@@ -25,7 +25,7 @@ import {
   IonContent,
 } from '@ionic/angular/standalone';
 import { LongpressDirective } from 'src/app/directives/longpress.directive';
-import { ProductDocument } from 'src/app/types/products.types';
+import { ProductDocument } from 'src/app/types/app.types';
 import 'animate.css';
 
 @Component({
@@ -63,7 +63,7 @@ export class ProductCardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.item.getImage(this.item.id).then((image) => {
+    this.item.getImage(this.item.idProduct).then((image) => {
       this.productImage = image;
     });
     this.selectedCard = false;

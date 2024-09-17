@@ -25,11 +25,11 @@ import {
   IonSearchbar,
   IonSkeletonText,
 } from '@ionic/angular/standalone';
-import { ProductDocument } from 'src/app/types/products.types';
+import { ProductDocument } from 'src/app/types/app.types';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductInsertComponent } from '../product-insert/product-insert.component';
 import { addIcons } from 'ionicons';
-import { trashBin } from 'ionicons/icons';
+import { analytics, trashBin } from 'ionicons/icons';
 
 @Component({
   selector: 'app-products-list',
@@ -85,10 +85,13 @@ export class ProductsListComponent implements OnInit {
   }
 
   async showEditProduct(product: ProductDocument) {
+    const db = await this.databaseService.get();
     const editModal = await this.editModalController.create({
       component: ProductInsertComponent,
       componentProps: {
         item: product,
+        itemPrice: '',
+        itemQuantity: '',
         isAdd: false,
       },
     });
@@ -96,13 +99,14 @@ export class ProductsListComponent implements OnInit {
   }
 
   selectProductToDelete(item: ProductDocument) {
-    if (!this.productToDelete.includes(item.id)) {
-      this.productToDelete.push(item.id);
+    if (!this.productToDelete.includes(item.idProduct)) {
+      this.productToDelete.push(item.idProduct);
     } else {
       this.productToDelete = this.productToDelete.filter(
-        (productId) => productId != item.id
+        (productId) => productId != item.idProduct
       );
     }
+
     if (this.productToDelete.length != 0) {
       this.isTrashBinVisible = true;
     } else {
@@ -114,6 +118,7 @@ export class ProductsListComponent implements OnInit {
     const db = await this.databaseService.get();
     db.products.bulkDeleteProduct(this.productToDelete).then((val) => {
       if (val.error.length == 0) {
+        this.productToDelete = [];
         this.isTrashBinVisible = false;
       } else {
         // error handling

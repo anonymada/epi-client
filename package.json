@@ -1,8 +1,8 @@
 {
   "name": "epi-client",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "anonymada",
+  "homepage": "",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -32,7 +32,11 @@
     "@capacitor/status-bar": "6.0.0",
     "@ionic/angular": "^8.0.0",
     "@ionic/pwa-elements": "^3.3.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "animate.css": "^4.1.1",
+    "date-fns": "^3.6.0",
+    "flag-icons": "^7.2.3",
     "ionic4-auto-complete": "^2.9.9",
     "ionicons": "^7.2.1",
     "ngx-pipes": "^3.2.2",

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DatabaseService } from 'src/app/services/database.service';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { calculator, close, trashBin } from 'ionicons/icons';
+import { calculator, trashBin, arrowBack } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import {
   IonInput,
@@ -25,20 +25,36 @@ import {
   IonItem,
   IonLabel,
   IonPopover,
-  PopoverController,
+  IonSelect,
+  IonSelectOption,
+  IonDatetimeButton,
+  IonDatetime,
+  IonCardSubtitle,
+  IonCard,
+  IonNote,
 } from '@ionic/angular/standalone';
-import { CommonModule } from '@angular/common';
-import { ProductDocument } from 'src/app/types/products.types';
+import { CommonModule, formatDate } from '@angular/common';
+import {
+  PriceDocument,
+  ProductDocument,
+  QuantityDocument,
+} from 'src/app/types/app.types';
 import { NgPipesModule } from 'ngx-pipes';
 import { PhotoComponent } from '../photo/photo.component';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-product-insert',
   templateUrl: './product-insert.component.html',
   styleUrls: ['./product-insert.component.scss'],
   standalone: true,
   imports: [
+    IonNote,
+    IonCard,
+    IonCardSubtitle,
+    IonDatetime,
+    IonDatetimeButton,
     IonPopover,
     IonLabel,
     IonItem,
@@ -49,6 +65,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     IonCol,
     IonRow,
     IonGrid,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonIcon,
     IonContent,
@@ -59,6 +77,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     IonModal,
     IonButton,
     IonInput,
+    TranslateModule,
     ReactiveFormsModule,
     CommonModule,
     NgPipesModule,
@@ -70,6 +89,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class ProductInsertComponent implements OnInit {
   @Input() isAdd!: boolean;
   @Input() item!: ProductDocument;
+  @Input() itemPrice!: PriceDocument;
+  @Input() itemQuantity!: QuantityDocument;
   @ViewChild('buyingPrice', { static: true }) buyingPrice!: IonInput;
   @ViewChild('sellingPrice', { static: true }) sellingPrice!: IonInput;
   productForm!: FormGroup;
@@ -78,6 +99,8 @@ export class ProductInsertComponent implements OnInit {
   private productImageEl!: HTMLImageElement;
   productImageBase64String: string = '';
   private productImageType: string = 'text/plain';
+  uniteMonetaire: string = '[Ariary]';
+  db: any;
 
   constructor(
     private databaseService: DatabaseService,
@@ -85,120 +108,127 @@ export class ProductInsertComponent implements OnInit {
     private editModalController: ModalController,
     private http: HttpClient
   ) {
-    addIcons({ close, trashBin, calculator });
-    this.productForm = this.formBuilder.group({
-      id: [''],
-      name: [''],
-      description: [''],
-      category: [''],
-      conditionningType: [''],
-      buyingPrice: [''],
-      sellingPrice: [''],
-      profitMargin: [''],
-      stockQuantity: [''],
-      supplyQuantity: [''],
-      soldQuantity: [''],
-    });
+    addIcons({ arrowBack, calculator, trashBin });
+
+    this.initializeForms();
   }
 
   async ngOnInit() {
-    const db = await this.databaseService.get();
-    this.productCategory = db.products.getAllCategories();
-    this.productConditionningType = db.products.getAllConditionningType();
+    this.db = await this.databaseService.get();
+    this.productCategory = this.db.products.getAllCategories();
+    this.productConditionningType = this.db.products.getAllConditionningType();
 
-    if (this.item != null && !this.isAdd) {
+    // populate all fields with database data (edit)
+    if (!this.isAdd && this.item != null) {
       Object.keys(this.productForm.controls).forEach((control) => {
-        this.productForm
-          .get(control)
-          ?.setValue(this.item[control as keyof typeof this.item]);
+        Object.keys(this.item._data).forEach((itemKey) => {
+          if (control == itemKey) {
+            this.productForm
+              .get(control)
+              ?.setValue(this.item[control as keyof typeof this.item]);
+          }
+        });
       });
-    }
+      this.db.prices.getProductPrices(this.item).then((P: any) => {
+        console.log(P);
+        Object.keys(this.productForm.controls).forEach((control) => {
+          Object.keys(P[P.length - 1]._data).forEach((itemKey) => {
+            if (control == itemKey && control != 'idPrice') {
+              this.productForm
+                .get(control)
+                ?.setValue(P[P.length - 1][control as keyof typeof P]);
+            }
+          });
+        });
+      });
+      this.db.quantities.getProductQuantities(this.item).then((Q: any) => {
+        Object.keys(this.productForm.controls).forEach((control) => {
+          Object.keys(Q[Q.length - 1]._data).forEach((itemKey) => {
+            if (control == itemKey && control != 'idQuantity') {
+              this.productForm
+                .get(control)
+                ?.setValue(Q[Q.length - 1][control as keyof typeof Q]);
+            }
+          });
+        });
+      });
 
-    if (this.isAdd) {
-      this.productForm.get('id')?.setValue(this.getUniqueId(4));
-    }
-
-    if (!this.isAdd) {
-      this.item.getImage(this.item.id)!.then((imageBase64: any) => {
+      this.item.getImage(this.item.idProduct)!.then((imageBase64: any) => {
         this.productImageEl = document.getElementById(
           'productImageElt'
         ) as HTMLImageElement;
         this.productImageEl.src = imageBase64;
       });
+
+      this.productForm
+        .get('idPrice')
+        ?.setValue(this.db.prices.generatePriceId());
+      this.productForm
+        .get('idQuantity')
+        ?.setValue(this.db.quantities.generateQuantityId());
     }
 
-    this.getBase64DefaultProductImage();
+    //populate fields with default data (add)
+    if (this.isAdd) {
+      this.productForm
+        .get('idProduct')
+        ?.setValue(this.db.products.generateProductId());
+      this.productForm
+        .get('idPrice')
+        ?.setValue(this.db.prices.generatePriceId());
+      this.productForm
+        .get('idQuantity')
+        ?.setValue(this.db.quantities.generateQuantityId());
+      this.getBase64DefaultProductImage();
+    }
   }
 
   async save() {
-    const db = await this.databaseService.get();
     if (this.isAdd) {
       if (this.productImageBase64String != '') {
-        db.products
+        this.db.products
           .insertProduct(this.productForm.getRawValue())
           .then((p: ProductDocument) => {
             if (p) {
               p.addImage(
-                p.id,
+                p.idProduct,
                 this.productImageBase64String,
                 this.productImageType
               ).then(() => {
                 this.editModalController.dismiss(null, 'cancel');
               });
+              this.db.prices.insertPrice(this.productForm.getRawValue());
+              this.db.quantities.insertQuantity(this.productForm.getRawValue());
             } else {
               //error handling
             }
           });
       }
     } else {
-      db.products
+      this.db.products
         .updateProduct(this.productForm.getRawValue())
         .then((p: ProductDocument) => {
           if (p) {
             p.addImage(
-              p.id,
+              p.idProduct,
               this.productImageBase64String,
               this.productImageType
             ).then(() => {
               this.editModalController.dismiss(null, 'cancel');
             });
+            this.db.prices.insertPrice(this.productForm.getRawValue());
+            this.db.quantities.insertQuantity(this.productForm.getRawValue());
           } else {
+            //error handling
           }
-          //error handling
         });
     }
   }
 
   async delete(item: ProductDocument) {
-    const db = await this.databaseService.get();
-    db.products.deleteProduct(item).then(() => {
+    this.db.products.deleteProduct(item).then(() => {
       this.editModalController.dismiss(null, 'cancel');
     });
-  }
-
-  close() {
-    this.editModalController.dismiss(null, 'cancel');
-  }
-
-  private getUniqueId(parts: number): string {
-    const stringArr = [];
-    for (let i = 0; i < parts; i++) {
-      // tslint:disable-next-line:no-bitwise
-      const S4 = (((1 + Math.random()) * 0x10000) | 0)
-        .toString(16)
-        .substring(1);
-      stringArr.push(S4);
-    }
-    return stringArr.join('-');
-  }
-
-  calculateProfitMargin(e: any) {
-    this.productForm
-      .get('profitMargin')
-      ?.setValue(
-        this.productForm.get('sellingPrice')?.value -
-          this.productForm.get('buyingPrice')?.value
-      );
   }
 
   async calculateField(ev: any, el: string) {
@@ -211,12 +241,48 @@ export class ProductInsertComponent implements OnInit {
     }
   }
 
+  calculateProfitMargin(e: any) {
+    if (
+      this.productForm.get('sellingPrice')?.value != 0 ||
+      this.productForm.get('buyingPrice')?.value != 0
+    ) {
+      this.productForm
+        .get('profitMargin')
+        ?.setValue(
+          this.productForm.get('sellingPrice')?.value -
+            this.productForm.get('buyingPrice')?.value
+        );
+    } else {
+      this.productForm.get('profitMargin')?.setValue(0);
+    }
+  }
+
+  calculateStockQuantity(e: any) {
+    if (
+      this.productForm.get('supplyQuantity')?.value != 0 ||
+      this.productForm.get('soldQuantity')?.value != 0
+    ) {
+      this.productForm
+        .get('stockQuantity')
+        ?.setValue(
+          this.productForm.get('supplyQuantity')?.value -
+            this.productForm.get('soldQuantity')?.value
+        );
+    } else {
+      this.productForm.get('stockQuantity')?.setValue(0);
+    }
+  }
+
   changePhoto(imageBase64: any) {
     this.productImageEl = document.getElementById(
       'productImageElt'
     ) as HTMLImageElement;
     this.productImageEl.src = imageBase64;
     this.productImageBase64String = imageBase64;
+  }
+
+  close() {
+    this.editModalController.dismiss(null, 'cancel');
   }
 
   getBase64DefaultProductImage() {
@@ -229,5 +295,34 @@ export class ProductInsertComponent implements OnInit {
         };
         reader.readAsDataURL(res);
       });
+  }
+
+  initializeForms() {
+    this.productForm = this.formBuilder.group({
+      idProduct: [''],
+      idPrice: [''],
+      idQuantity: [''],
+      name: [''],
+      description: [''],
+      category: [''],
+      conditionningType: [''],
+      buyingPrice: [''],
+      sellingPrice: [''],
+      profitMargin: [{ value: '', disabled: true }],
+      profitMarginDate: [],
+      stockQuantity: [{ value: '', disabled: true }],
+      stockQuantityDate: [],
+      supplyQuantity: [''],
+      soldQuantity: [''],
+    });
+
+    this.productForm.patchValue({
+      buyingPrice: 0,
+      sellingPrice: 0,
+      profitMargin: 0,
+      stockQuantity: 0,
+      supplyQuantity: 0,
+      soldQuantity: 0,
+    });
   }
 }

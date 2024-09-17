@@ -36,6 +36,7 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 @import 'animate.css';
+@import 'node_modules/flag-icons/css/flag-icons.min.css';
 
 html {
     --ion-dynamic-font: var(--ion-dynamic-font);
@@ -43,39 +44,39 @@ html {
     font-size: 100%;
     
     @media (max-width: 289px) {
-        font-size: 60%;
+        font-size: 70%;
     }
 
     @media (min-width: 290px) {
-        font-size: 62.5%;
-    }
-
-    @media (min-width: 300px) {
-        font-size: 65.5%;
-    }
-
-    @media (min-width: 320px) {
-        font-size: 67.5%;
-    }
-
-    @media (min-width: 325px) {
-        font-size: 69.5%;
-    }
-
-    @media (min-width: 326px) {
-        font-size: 70.5%;
-    }
-
-    @media (min-width: 330px) {
         font-size: 72.5%;
     }
 
+    @media (min-width: 300px) {
+        font-size: 75.5%;
+    }
+
+    @media (min-width: 320px) {
+        font-size: 77.5%;
+    }
+
+    @media (min-width: 325px) {
+        font-size: 79.5%;
+    }
+
+    @media (min-width: 326px) {
+        font-size: 80.5%;
+    }
+
+    @media (min-width: 330px) {
+        font-size: 82.5%;
+    }
+
     @media (min-width: 360px) {
-        font-size: 74.5%;
+        font-size: 84.5%;
     }
 
     @media (min-width: 411px) {
-        font-size: 80%;
+        font-size: 90%;
     }
 
     @media (min-width: 500px) {

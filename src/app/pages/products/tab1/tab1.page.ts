@@ -14,6 +14,8 @@ import {
 } from '@ionic/angular/standalone';
 import { ProductInsertComponent } from '../../../components/product-insert/product-insert.component';
 import { addIcons } from 'ionicons';
+import { TranslateModule } from '@ngx-translate/core';
+import { HearderComponent } from '../../../components/hearder/hearder.component';
 
 @Component({
   selector: 'app-tab1',
@@ -29,8 +31,10 @@ import { addIcons } from 'ionicons';
     IonContent,
     IonHeader,
     CommonModule,
+    TranslateModule,
     ProductsListComponent,
     ProductInsertComponent,
+    HearderComponent,
   ],
 })
 export class Tab1Page {

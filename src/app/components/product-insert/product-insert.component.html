@@ -7,20 +7,27 @@
       fill="clear"
       (click)="close()"
     >
-      <ion-icon size="large" name="close" slot="icon-only"></ion-icon>
+      <ion-icon size="large" name="arrow-back" slot="icon-only"></ion-icon>
     </ion-button>
     <ng-container *ngIf="isAdd; else edit0">
-      <ion-title class="ion-text-center">Ajouter</ion-title>
+      <ion-title class="ion-text-center">
+        {{ "GLOBAL.ADD" | translate }}
+      </ion-title>
     </ng-container>
     <ng-template #edit0>
-      <ion-title class="ion-text-center">Editer</ion-title>
+      <ion-title class="ion-text-center">
+        {{ "GLOBAL.EDIT" | translate }}
+      </ion-title>
     </ng-template>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <form [formGroup]="productForm" (ngSubmit)="save()">
-    <ion-input type="text" label="ID" formControlName="id" *ngIf="false">
-    </ion-input>
+    <div *ngIf="false">
+      <ion-input type="text" formControlName="idProduct"></ion-input>
+      <ion-input type="text" formControlName="idPrice"></ion-input>
+      <ion-input type="text" formControlName="idQuantity"></ion-input>
+    </div>
     <ion-accordion-group value="first">
       <ion-accordion value="first">
         <ion-item slot="header">
@@ -31,7 +38,9 @@
                 src="../../../assets/images/products.png"
               />
             </ion-thumbnail>
-            <ion-title class="ion-text-center">Produit</ion-title>
+            <ion-title class="ion-text-center">
+              {{ "PRODUCT.PRODUCTS" | translate }}
+            </ion-title>
           </ng-container>
           <ng-template #edit1>
             <ion-thumbnail>
@@ -52,12 +61,15 @@
             </ion-row>
             <!-- name -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Nom : </ion-label>
-                </ion-col>
+              <ion-item class="ion-no-padding">
                 <ion-col>
-                  <ion-input type="text" fill="outline" formControlName="name">
+                  <ion-input
+                    type="text"
+                    fill="outline"
+                    formControlName="name"
+                    label="{{ 'PRODUCT.NAME' | translate }}"
+                    labelPlacement="stacked"
+                  >
                   </ion-input>
                 </ion-col>
               </ion-item>
@@ -65,27 +77,36 @@
 
             <!-- description -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Description : </ion-label>
-                </ion-col>
+              <ion-item class="ion-no-padding">
                 <ion-col>
                   <ion-textarea
                     [autoGrow]="true"
                     fill="outline"
                     formControlName="description"
+                    label="{{ 'PRODUCT.DESCRIPTION' | translate }}"
+                    labelPlacement="stacked"
                   >
                   </ion-textarea>
                 </ion-col>
               </ion-item>
             </ion-row>
 
-            <!-- category -->
+            <!-- category et conditionningType -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Catégorie : </ion-label>
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-col>
+                  <ion-label>{{ "PRODUCT.CATEGORY" | translate }}</ion-label>
                 </ion-col>
+                <ion-col>
+                  <ion-label>
+                    {{ "PRODUCT.CONDITIONNINGTYPE" | translate }}
+                  </ion-label>
+                </ion-col>
+              </ion-item>
+            </ion-row>
+
+            <ion-row>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-col>
                   <input
                     id="category"
@@ -103,15 +124,6 @@
                       </option>
                     </select>
                   </datalist>
-                </ion-col>
-              </ion-item>
-            </ion-row>
-
-            <!-- conditionningType -->
-            <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Unité :</ion-label>
                 </ion-col>
                 <ion-col>
                   <input
@@ -143,22 +155,24 @@
           <ion-thumbnail>
             <img src="../../../assets/images/money.png" />
           </ion-thumbnail>
-          <ion-title class="ion-text-center">Prix</ion-title>
+          <ion-title class="ion-text-center">
+            {{ "PRODUCT.PRICE" | translate }} {{ uniteMonetaire }}
+          </ion-title>
         </ion-item>
         <div slot="content">
           <ion-grid>
             <!-- buying price -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Achat :</ion-label>
-                </ion-col>
-                <ion-col>
+              <ion-item class="ion-no-padding">
+                <ion-col size="7">
                   <ion-input
                     #buyingPrice
                     type="number"
                     fill="outline"
+                    label="{{ 'PRODUCT.BUYINGPRICE' | translate }}"
+                    labelPlacement="stacked"
                     formControlName="buyingPrice"
+                    (ionInput)="calculateProfitMargin($event)"
                   >
                     <ion-button
                       id="buyingPrice"
@@ -174,7 +188,7 @@
                     </ion-button>
                     <ion-popover trigger="buyingPrice" triggerAction="click">
                       <ng-template>
-                        <ion-content class="ion-padding">
+                        <ion-content>
                           <app-calculator
                             (calculatorResult)="
                               calculateField($event, 'buyingPrice')
@@ -186,22 +200,24 @@
                     </ion-popover>
                   </ion-input>
                 </ion-col>
+                <ion-col size="5">
+                  
+                </ion-col>
               </ion-item>
             </ion-row>
             <!-- sellingPrice -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Vente :</ion-label>
-                </ion-col>
-                <ion-col>
+              <ion-item class="ion-no-padding">
+                <ion-col size="7">
                   <ion-input
                     #sellingPrice
                     type="number"
                     fill="outline"
+                    label="{{ 'PRODUCT.SELLINGPRICE' | translate }}"
+                    labelPlacement="stacked"
                     formControlName="sellingPrice"
+                    (ionInput)="calculateProfitMargin($event)"
                   >
-                    <!-- (click)="calculateField('sellingPrice')" -->
                     <ion-button id="sellingPrice" fill="clear" slot="end">
                       <ion-icon
                         slot="icon-only"
@@ -222,20 +238,23 @@
                     </ion-popover>
                   </ion-input>
                 </ion-col>
+                <ion-col size="5">
+                  
+                </ion-col>
               </ion-item>
             </ion-row>
             <!-- profitMargin -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Marge :</ion-label>
+              <ion-item class="ion-no-padding">
+                <ion-col size="5">
                 </ion-col>
-                <ion-col>
+                <ion-col size="7">
                   <ion-input
                     type="number"
                     fill="outline"
-                    (ionFocus)="calculateProfitMargin($event)"
                     formControlName="profitMargin"
+                    label="{{ 'PRODUCT.PROFITMARGIN' | translate }}"
+                    labelPlacement="stacked"
                   >
                   </ion-input>
                 </ion-col>
@@ -249,53 +268,69 @@
           <ion-thumbnail>
             <img src="../../../assets/images/stock.png" />
           </ion-thumbnail>
-          <ion-title class="ion-text-center">Quantité</ion-title>
+          <ng-container *ngIf="isAdd; else edit2">
+            <ion-title class="ion-text-center">
+              {{ "PRODUCT.QUANTITY" | translate }}
+            </ion-title>
+          </ng-container>
+          <ng-template #edit2>
+            <ion-title class="ion-text-center">
+              {{ "PRODUCT.QUANTITY" | translate }}
+              {{ "[" + item.conditionningType + "]" }}
+            </ion-title>
+          </ng-template>
         </ion-item>
         <div slot="content">
           <ion-grid>
-            <!-- stockQuantity -->
-            <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Stock :</ion-label>
-                </ion-col>
-                <ion-col>
-                  <ion-input
-                    type="number"
-                    fill="outline"
-                    formControlName="stockQuantity"
-                  >
-                  </ion-input>
-                </ion-col>
-              </ion-item>
-            </ion-row>
             <!-- supplyQuantity -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Commande :</ion-label>
-                </ion-col>
-                <ion-col>
+              <ion-item class="ion-no-padding">
+                <ion-col size="7">
                   <ion-input
                     type="number"
                     fill="outline"
+                    label="{{ 'PRODUCT.SUPPLYQUANTITY' | translate }}"
+                    labelPlacement="stacked"
                     formControlName="supplyQuantity"
+                    (ionInput)="calculateStockQuantity($event)"
                   >
                   </ion-input>
+                </ion-col>
+                <ion-col size="5">
                 </ion-col>
               </ion-item>
             </ion-row>
             <!-- soldQuantity -->
             <ion-row>
-              <ion-item>
-                <ion-col size="4">
-                  <ion-label>Vente :</ion-label>
-                </ion-col>
-                <ion-col>
+              <ion-item class="ion-no-padding">
+                <ion-col size="7">
                   <ion-input
                     type="number"
                     fill="outline"
+                    label="{{ 'PRODUCT.SOLDQUANTITY' | translate }}"
+                    labelPlacement="stacked"
                     formControlName="soldQuantity"
+                    (ionInput)="calculateStockQuantity($event)"
+                  >
+                  </ion-input>
+                </ion-col>
+                <ion-col size="5">
+                </ion-col>
+              </ion-item>
+            </ion-row>
+            <!-- stockQuantity -->
+            <ion-row>
+              <ion-item class="ion-no-padding">
+                <ion-col size="5">
+                </ion-col>
+                <ion-col size="7">
+                  <ion-input
+                    type="number"
+                    fill="outline"
+                    label="{{ 'PRODUCT.STOCKQUANTITY' | translate }}"
+                    labelPlacement="stacked"
+                    formControlName="stockQuantity"
+                    (ionFocus)="calculateStockQuantity($event)"
                   >
                   </ion-input>
                 </ion-col>

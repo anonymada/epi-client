@@ -1,0 +1,15 @@
+<ion-button id="menu-click-trigger" shape="round" size="medium">
+  <span>
+    <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+  </span>
+</ion-button>
+<ion-popover trigger="menu-click-trigger" triggerAction="click" size="auto">
+  <ng-template>
+    <ion-content>
+      <ion-list>
+        <ion-item [button]="true" [detail]="false">Option 1</ion-item>
+        <ion-item [button]="true" [detail]="false">Option 2</ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>

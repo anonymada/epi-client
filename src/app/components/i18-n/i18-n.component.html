@@ -1,0 +1,23 @@
+<ion-button id="i18n-click-trigger" fill="clear" shape="round" size="medium">
+  <span class="fi fi-{{ langSelected }}"></span>
+</ion-button>
+<ion-popover trigger="i18n-click-trigger" [dismissOnSelect]="true">
+  <ng-template>
+    <ion-content>
+      <ion-list
+        lines="none"
+        class="ion-no-padding"
+        *ngFor="let lang of langDict | keyvalue"
+      >
+        <ion-item
+          [button]="true"
+          [detail]="false"
+          (click)="langPicker(lang.key)"
+        >
+          <ion-icon class="fi fi-{{ lang.key }}"></ion-icon>&nbsp;
+          {{ lang.value | translate }}
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>
