@@ -140,8 +140,8 @@ export class CalculatorComponent implements OnInit {
     ) {
       formula = formula.substr(0, formula.length - 1);
     }
-
-    this.result = eval(formula);
+    var indirectEval = eval;
+    this.result = indirectEval(formula);
     this.ionInputEl.value = this.input;
   }
 

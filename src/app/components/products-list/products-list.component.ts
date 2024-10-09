@@ -25,11 +25,15 @@ import {
   IonSearchbar,
   IonSkeletonText,
 } from '@ionic/angular/standalone';
-import { ProductDocument } from 'src/app/types/app.types';
+import {
+  PriceDocument,
+  ProductDocument,
+  QuantityDocument,
+} from 'src/app/types/app.types';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductInsertComponent } from '../product-insert/product-insert.component';
 import { addIcons } from 'ionicons';
-import { analytics, trashBin } from 'ionicons/icons';
+import { trashBin } from 'ionicons/icons';
 
 @Component({
   selector: 'app-products-list',
@@ -69,6 +73,7 @@ export class ProductsListComponent implements OnInit {
   searchTerm!: string;
   productToDelete: string[] = [];
   isTrashBinVisible: boolean = false;
+  db: any;
 
   constructor(
     private databaseService: DatabaseService,
@@ -78,14 +83,13 @@ export class ProductsListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const db = await this.databaseService.get();
-    db.products.listAllProducts().subscribe((p: ProductDocument[]) => {
+    this.db = await this.databaseService.get();
+    this.db.products.listAllProducts().subscribe((p: ProductDocument[]) => {
       this.products = p;
     });
   }
 
   async showEditProduct(product: ProductDocument) {
-    const db = await this.databaseService.get();
     const editModal = await this.editModalController.create({
       component: ProductInsertComponent,
       componentProps: {
@@ -115,14 +119,15 @@ export class ProductsListComponent implements OnInit {
   }
 
   async bulkDelete() {
-    const db = await this.databaseService.get();
-    db.products.bulkDeleteProduct(this.productToDelete).then((val) => {
-      if (val.error.length == 0) {
-        this.productToDelete = [];
-        this.isTrashBinVisible = false;
-      } else {
-        // error handling
-      }
-    });
+    this.db.products
+      .bulkDeleteProduct(this.productToDelete)
+      .then((val: { error: string | any[] }) => {
+        if (val.error.length == 0) {
+          this.productToDelete = [];
+          this.isTrashBinVisible = false;
+        } else {
+          // error handling
+        }
+      });
   }
 }

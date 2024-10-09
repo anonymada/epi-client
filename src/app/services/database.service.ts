@@ -99,7 +99,7 @@ export class DatabaseService {
       listAllProducts: function (
         this: ProductCollection
       ): BehaviorSubject<ProductDocument[]> {
-        return this.find().$;
+        return this.find().$ as BehaviorSubject<ProductDocument[]>;
       },
 
       insertProduct: function (

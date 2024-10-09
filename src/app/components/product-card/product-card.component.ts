@@ -27,6 +27,7 @@ import {
 import { LongpressDirective } from 'src/app/directives/longpress.directive';
 import { ProductDocument } from 'src/app/types/app.types';
 import 'animate.css';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'app-product-card',
@@ -56,17 +57,24 @@ export class ProductCardComponent implements OnInit {
   @Input() cardId!: string;
   @Output() shortPress = new EventEmitter();
   @Output() longPress = new EventEmitter();
+  db: any;
+  price: string = '0';
+  quantity: string = '0';
 
   productImage: string = '../../../assets/images/products.png';
   selectedCard: boolean = false;
 
-  constructor() {}
+  constructor(private databaseService: DatabaseService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.db = await this.databaseService.get();
     this.item.getImage(this.item.idProduct).then((image) => {
       this.productImage = image;
     });
     this.selectedCard = false;
+    this.db.prices.getProductPrices(this.item).then((P: any) => {
+      this.price = P[P.length - 1]._data['sellingPrice'];
+    });
   }
 
   onPress() {

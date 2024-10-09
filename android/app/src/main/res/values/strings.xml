@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">epi-client</string>
-    <string name="title_activity_main">epi-client</string>
+    <string name="app_name">TSeNAKO</string>
+    <string name="title_activity_main">TSeNAKO</string>
     <string name="package_name">epi.client</string>
     <string name="custom_url_scheme">epi.client</string>
 </resources>

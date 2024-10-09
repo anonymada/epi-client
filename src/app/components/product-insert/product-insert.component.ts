@@ -1,6 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DatabaseService } from 'src/app/services/database.service';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { calculator, trashBin, arrowBack } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import {
@@ -130,7 +135,6 @@ export class ProductInsertComponent implements OnInit {
         });
       });
       this.db.prices.getProductPrices(this.item).then((P: any) => {
-        console.log(P);
         Object.keys(this.productForm.controls).forEach((control) => {
           Object.keys(P[P.length - 1]._data).forEach((itemKey) => {
             if (control == itemKey && control != 'idPrice') {
@@ -232,7 +236,6 @@ export class ProductInsertComponent implements OnInit {
   }
 
   async calculateField(ev: any, el: string) {
-    console.log(ev);
     if (el == 'buyingPrice') {
       this.productForm.get('buyingPrice')?.setValue(ev);
     }
@@ -299,21 +302,19 @@ export class ProductInsertComponent implements OnInit {
 
   initializeForms() {
     this.productForm = this.formBuilder.group({
-      idProduct: [''],
-      idPrice: [''],
-      idQuantity: [''],
-      name: [''],
+      idProduct: ['', [Validators.required]],
+      idPrice: ['', [Validators.required]],
+      idQuantity: ['', [Validators.required]],
+      name: ['', [Validators.required]],
       description: [''],
-      category: [''],
-      conditionningType: [''],
-      buyingPrice: [''],
-      sellingPrice: [''],
+      category: ['', [Validators.required]],
+      conditionningType: ['', [Validators.required]],
+      buyingPrice: ['', [Validators.required]],
+      sellingPrice: ['', [Validators.required]],
       profitMargin: [{ value: '', disabled: true }],
-      profitMarginDate: [],
       stockQuantity: [{ value: '', disabled: true }],
-      stockQuantityDate: [],
-      supplyQuantity: [''],
-      soldQuantity: [''],
+      supplyQuantity: ['', [Validators.required]],
+      soldQuantity: ['', [Validators.required]],
     });
 
     this.productForm.patchValue({
