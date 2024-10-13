@@ -1,16 +1,65 @@
-.card {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    margin-top: 2%;
-    margin-bottom: 2%;
-    background-color: var(--ion-color-light);
-    box-shadow: 1px 1px 1px rgb(52, 62, 70);
-    display: inline-block;
+.dynamic-card {
+  width: 100%;
+  height: 250px;
+  margin: 0px;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center center;
+  color: white; /* Pour que le texte soit visible par-dessus l'image */
+  overflow: hidden;
+  position: relative;
 }
 
-ion-thumbnail {
-    width: 100%;
-    --border-radius:4px;
+.dynamic-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    22,
+    20,
+    20,
+    0.5
+  ); /* Optionnel : Overlay pour améliorer la lisibilité */
+  z-index: 0;
 }
 
+.dynamic-card ion-card-header,
+.dynamic-card ion-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.card-title {
+  position: absolute; /* Positionnement absolu */
+  color: white; /* Couleur du texte pour contraste */
+  z-index: 2; /* S'assurer que le sous-titre soit au-dessus des autres éléments */
+  background-color: rgba(
+    10,
+    10,
+    10,
+    0.5
+  ); /* Fond semi-transparent pour améliorer la lisibilité */
+  padding: 5px; /* Espacement intérieur pour le sous-titre */
+  border-radius: 5px; /* Arrondi pour le fond */
+}
+
+.card-subtitle {
+  position: absolute; /* Positionnement absolu */
+  bottom: 10px; /* Distance du bas */
+  right: 10px; /* Distance de droite */
+  color: white; /* Couleur du texte pour contraste */
+  z-index: 2; /* S'assurer que le sous-titre soit au-dessus des autres éléments */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Fond semi-transparent pour améliorer la lisibilité */
+  padding: 5px; /* Espacement intérieur pour le sous-titre */
+  border-radius: 5px; /* Arrondi pour le fond */
+}

@@ -1,4 +1,5 @@
 <ion-card
+  class="dynamic-card"
   id="{{ cardId }}"
   appLongpress
   (press)="onLongPress()"
@@ -6,12 +7,13 @@
   [ngClass]="
     selectedCard ? 'animate__animated animate__pulse animate__infinite' : 'card'
   "
+  [ngStyle]="{ 'background-image': 'url(' + productImage + ')' }"
 >
   <ion-card-header>
-    <ion-thumbnail> <img src="{{ productImage }}" /> </ion-thumbnail>
+    <ion-card-title class="ion-text-wrap card-title">
+      {{ item.name }}
+    </ion-card-title>
   </ion-card-header>
-  <ion-card-content>
-    <ion-card-title class="ion-text-wrap">{{ item.name }}</ion-card-title>
-    <ion-card-subtitle>Ar {{ price }}</ion-card-subtitle>
-  </ion-card-content>
+  <ion-card-content> </ion-card-content>
+  <ion-card-subtitle class="card-subtitle">Ar {{ price }}</ion-card-subtitle>
 </ion-card>
