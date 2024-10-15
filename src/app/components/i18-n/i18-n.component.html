@@ -1,7 +1,18 @@
-<ion-button id="i18n-click-trigger" fill="clear" shape="round" size="medium">
+<ion-button
+  (click)="presentPopover($event)"
+  fill="clear"
+  shape="round"
+  size="medium"
+>
   <span class="fi fi-{{ langSelected }}"></span>
 </ion-button>
-<ion-popover trigger="i18n-click-trigger" [dismissOnSelect]="true">
+<ion-popover
+  #popover
+  [isOpen]="isOpen"
+  (didDismiss)="isOpen = false"
+  [dismissOnSelect]="true"
+  size="auto"
+>
   <ng-template>
     <ion-content>
       <ion-list

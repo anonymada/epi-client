@@ -1,5 +1,4 @@
-<app-hearder pageTitle="{{'PRODUCT.PRODUCTS'}}"></app-hearder>
-<ion-content>
+<ion-content [fullscreen]="true">
   <app-products-list></app-products-list>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="showAddProduct()" size="small">

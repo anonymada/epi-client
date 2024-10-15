@@ -34,7 +34,7 @@ export class PhotoComponent {
       promptLabelPhoto: 'Gallerie',
       promptLabelPicture: 'Appareil photo',
       promptLabelCancel: 'Annuler',
-      quality: 100,
+      quality: 200,
       height: 100,
       width: 100,
     })

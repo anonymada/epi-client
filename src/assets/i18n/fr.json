@@ -77,6 +77,8 @@
     "CATEGORY": "Catégorie",
     "CONDITIONNINGTYPE": "Conditionnement",
     "DESCRIPTION": "Description",
+    "INSTOCK": "En stock",
+    "MARKETVALUE": "Valeur",
     "NAME": "Nom",
     "PRICE": "Prix",
     "PRODUCTS": "Produits",
@@ -85,6 +87,7 @@
     "SELLINGPRICE": "Vente",
     "SOLDQUANTITY": "Vendue",
     "STOCKQUANTITY": "Stockée",
-    "SUPPLYQUANTITY": "Commandée"
+    "SUPPLYQUANTITY": "Commandée",
+    "TOTALNUMBER": "Produits"
   }
 }

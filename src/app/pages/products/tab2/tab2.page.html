@@ -1,9 +1,59 @@
-<app-hearder pageTitle="{{'GLOBAL.HOME'}}"></app-hearder>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid>
+    <!-- Carte pour le total des produits -->
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title> {{'PRODUCT.PRODUCTS'| translate}} </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h1>{{ productsNumber }}</h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{'PRODUCT.MARKETVALUE'| translate}}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h1>
+              {{productsMarketValue | currency : "Ar " : "symbol" : "1.0-0"}}
+            </h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Carte pour l'évolution des prix -->
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Évolution des Prix</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas id="priceChart"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Carte pour l'évolution des stocks -->
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Évolution des Stocks</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas id="stockChart"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

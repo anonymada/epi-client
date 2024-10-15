@@ -1,4 +1,4 @@
-<ion-card
+<!-- <ion-card
   class="dynamic-card"
   id="{{ cardId }}"
   appLongpress
@@ -14,6 +14,37 @@
       {{ item.name }}
     </ion-card-title>
   </ion-card-header>
-  <ion-card-content> </ion-card-content>
-  <ion-card-subtitle class="card-subtitle">Ar {{ price }}</ion-card-subtitle>
+  <ion-card-content>
+    <ion-badge>{{ stockQuantity }}</ion-badge>
+  </ion-card-content>
+  <ion-card-subtitle class="card-subtitle"
+    >Ar {{ sellingPrice }}</ion-card-subtitle
+  >
+</ion-card> -->
+<ion-card
+  id="{{ cardId }}"
+  appLongpress
+  (press)="onLongPress()"
+  (click)="onPress()"
+  [ngClass]="
+    selectedCard ? 'animate__animated animate__pulse animate__infinite' : 'card'
+  "
+>
+  <ion-card-header class="product-header">
+    <ion-card-title>{{ item.name }}</ion-card-title>
+    <ion-card-subtitle>[{{ item.conditionningType }}]</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content class="product-content">
+    <div
+      class="product-image"
+      [ngStyle]="{ 'background-image': 'url(' + productImage + ')' }"
+    ></div>
+    <div class="stock-label">
+      {{ "PRODUCT.INSTOCK" | translate }} : {{ stockQuantity }}
+    </div>
+    <div class="price-label">
+      {{ sellingPrice | currency : "Ar " : "symbol" : "1.0-0" }}
+    </div>
+  </ion-card-content>
 </ion-card>

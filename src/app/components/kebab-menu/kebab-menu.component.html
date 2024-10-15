@@ -1,9 +1,15 @@
-<ion-button id="menu-click-trigger" shape="round" size="medium">
+<ion-button (click)="presentPopover($event)" shape="round" size="medium">
   <span>
     <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
   </span>
 </ion-button>
-<ion-popover trigger="menu-click-trigger" triggerAction="click" size="auto">
+<ion-popover
+  #popover
+  [isOpen]="isOpen"
+  (didDismiss)="isOpen = false"
+  [dismissOnSelect]="true"
+  size="auto"
+>
   <ng-template>
     <ion-content>
       <ion-list>

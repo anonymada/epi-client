@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   IonButton,
   IonPopover,
@@ -27,6 +27,9 @@ import { I18NComponent } from '../i18-n/i18-n.component';
   ],
 })
 export class KebabMenuComponent implements OnInit {
+  @ViewChild('popover') popover: { event: Event } | undefined;
+  isOpen = false;
+
   constructor() {
     addIcons({
       ellipsisVertical,
@@ -34,4 +37,9 @@ export class KebabMenuComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  presentPopover(e: Event) {
+    this.popover!.event = e;
+    this.isOpen = true;
+  }
 }

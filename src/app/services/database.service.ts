@@ -42,6 +42,7 @@ const DATE_NOW = formatDate(Date.now(), 'yyyy-MM-dd HH:mm:ss', 'en');
 })
 export class DatabaseService {
   static dbPromise: Promise<Database>;
+  private productCountSubject = new BehaviorSubject(0); // Comportement sujet pour le compte des produits
 
   constructor() {}
 
@@ -91,11 +92,6 @@ export class DatabaseService {
     };
 
     const productCollectionMethods: ProductCollectionMethods = {
-      countAllProducts: async function (this: ProductCollection) {
-        const allDocs = await this.find().exec();
-        return allDocs.length;
-      },
-
       listAllProducts: function (
         this: ProductCollection
       ): BehaviorSubject<ProductDocument[]> {

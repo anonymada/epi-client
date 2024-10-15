@@ -77,6 +77,8 @@
     "CATEGORY": "Sokajy",
     "CONDITIONNINGTYPE": "Famarana",
     "DESCRIPTION": "Famaritana",
+    "INSTOCK": "Tahiry",
+    "MARKETVALUE": "Vidiny",
     "NAME": "Anarana",
     "PRICE": "Vidiny",
     "PRODUCTS": "Entana",
@@ -85,6 +87,7 @@
     "SELLINGPRICE": "Famarotana",
     "SOLDQUANTITY": "Lafo",
     "STOCKQUANTITY": "Tahiry",
-    "SUPPLYQUANTITY": "Vinidy"
+    "SUPPLYQUANTITY": "Vinidy",
+    "TOTALNUMBER": "Entana"
   }
 }

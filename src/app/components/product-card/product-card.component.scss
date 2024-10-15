@@ -1,65 +1,103 @@
-.dynamic-card {
+ion-card {
   width: 100%;
   height: 250px;
   margin: 0px;
   margin-top: 2%;
   margin-bottom: 2%;
-  border-radius: 12px;
-  background-size: cover;
-  background-position: center center;
-  color: white; /* Pour que le texte soit visible par-dessus l'image */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  // background-color: rgb(255, 255, 255);
   overflow: hidden;
-  position: relative;
 }
 
-.dynamic-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(
-    22,
-    20,
-    20,
-    0.5
-  ); /* Optionnel : Overlay pour améliorer la lisibilité */
-  z-index: 0;
+ion-card-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  z-index: 1; /* Le texte reste au-dessus du fond */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.dynamic-card ion-card-header,
-.dynamic-card ion-card-content {
+ion-card-header {
+  height: calc(100% / 4); /* 1/6 de la hauteur de la carte */
+  display: flex;
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+ion-card-subtitle {
+  font-size: 1rem;
+  text-align: right;
+  z-index: 1; /* Le texte reste au-dessus du fond */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+ion-card-header {
+  height: calc(100% / 4); /* 1/6 de la hauteur de la carte */
+  display: flex;
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-content {
+  height: calc(100% * 3 / 4); /* 2/3 de la hauteur de la carte */
+  display: flex;
+  align-items: center; /* Centrer verticalement le contenu */
+  padding-left: 5px; /* Distance par rapport au côté gauche */
+  padding-right: 10px;
+}
+
+.stock-label {
   position: relative;
   z-index: 1;
+  background: linear-gradient(135deg, #95da85 0%, #25d366 50%, #25d370 100%);
+  padding: 5px 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  color: white;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.card-title {
-  position: absolute; /* Positionnement absolu */
-  color: white; /* Couleur du texte pour contraste */
-  z-index: 2; /* S'assurer que le sous-titre soit au-dessus des autres éléments */
-  background-color: rgba(
-    10,
-    10,
-    10,
-    0.5
-  ); /* Fond semi-transparent pour améliorer la lisibilité */
-  padding: 5px; /* Espacement intérieur pour le sous-titre */
-  border-radius: 5px; /* Arrondi pour le fond */
-}
-
-.card-subtitle {
+.price-label {
   position: absolute; /* Positionnement absolu */
   bottom: 10px; /* Distance du bas */
   right: 10px; /* Distance de droite */
-  color: white; /* Couleur du texte pour contraste */
-  z-index: 2; /* S'assurer que le sous-titre soit au-dessus des autres éléments */
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.6
-  ); /* Fond semi-transparent pour améliorer la lisibilité */
-  padding: 5px; /* Espacement intérieur pour le sous-titre */
-  border-radius: 5px; /* Arrondi pour le fond */
+  z-index: 1;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: linear-gradient(135deg, #3b5960 0%, #3b5998 50%, #3b5960 100%);
+}
+
+.product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(70%);
 }

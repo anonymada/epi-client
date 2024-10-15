@@ -1,4 +1,6 @@
-<ion-tabs>
+<app-hearder pageTitle="{{currentTitle}}"></app-hearder>
+
+<ion-tabs (ionTabsDidChange)="onTabChange($event)">
   <ion-tab-bar slot="bottom" color="primary">
     <ion-tab-button tab="tab2" href="/tabs/tab2">
       <ion-icon aria-hidden="true" name="storefront"></ion-icon>

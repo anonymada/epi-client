@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   IonButton,
@@ -27,6 +27,8 @@ import {
   ],
 })
 export class I18NComponent implements OnInit {
+  @ViewChild('popover') popover: { event: Event } | undefined;
+  isOpen = false;
   langDict = {
     fr: 'GLOBAL.FRENCH',
     mg: 'GLOBAL.MALAGASY',
@@ -34,7 +36,9 @@ export class I18NComponent implements OnInit {
 
   langSelected: any;
 
-  constructor(public translate: TranslateService) {}
+  constructor(public translate: TranslateService) {
+    console.log(this.langSelected);
+  }
 
   ngOnInit(): void {
     if (localStorage['language'] == undefined) {
@@ -48,5 +52,10 @@ export class I18NComponent implements OnInit {
     this.translate.use(lang);
     this.langSelected = lang;
     localStorage['language'] = lang;
+  }
+
+  presentPopover(e: Event) {
+    this.popover!.event = e;
+    this.isOpen = true;
   }
 }

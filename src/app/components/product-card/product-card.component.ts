@@ -1,14 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {
   IonCard,
   IonThumbnail,
@@ -18,6 +9,8 @@ import {
   IonCardSubtitle,
   IonModal,
   IonToolbar,
+  IonBadge,
+  IonLabel,
   IonButtons,
   IonButton,
   IonHeader,
@@ -28,6 +21,7 @@ import { LongpressDirective } from 'src/app/directives/longpress.directive';
 import { ProductDocument } from 'src/app/types/app.types';
 import 'animate.css';
 import { DatabaseService } from 'src/app/services/database.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-card',
@@ -41,6 +35,8 @@ import { DatabaseService } from 'src/app/services/database.service';
     IonButton,
     IonButtons,
     IonToolbar,
+    IonBadge,
+    IonLabel,
     IonThumbnail,
     IonModal,
     IonCardSubtitle,
@@ -50,6 +46,7 @@ import { DatabaseService } from 'src/app/services/database.service';
     IonCardContent,
     LongpressDirective,
     CommonModule,
+    TranslateModule,
   ],
 })
 export class ProductCardComponent implements OnInit {
@@ -58,8 +55,8 @@ export class ProductCardComponent implements OnInit {
   @Output() shortPress = new EventEmitter();
   @Output() longPress = new EventEmitter();
   db: any;
-  price: string = '0';
-  quantity: string = '0';
+  sellingPrice: string = '0';
+  stockQuantity: string = '0';
 
   productImage: string = '../../../assets/images/products.png';
   selectedCard: boolean = false;
@@ -72,8 +69,15 @@ export class ProductCardComponent implements OnInit {
       this.productImage = image;
     });
     this.selectedCard = false;
+
+    //le dernier prix enregistré
     this.db.prices.getProductPrices(this.item).then((P: any) => {
-      this.price = P[P.length - 1]._data['sellingPrice'];
+      this.sellingPrice = P[P.length - 1]._data['sellingPrice'];
+    });
+
+    //la dernière quantité en stock
+    this.db.quantities.getProductQuantities(this.item).then((P: any) => {
+      this.stockQuantity = P[P.length - 1]._data['stockQuantity'];
     });
   }
 

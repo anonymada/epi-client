@@ -28,7 +28,6 @@ export type ProductDocMethods = {
 export type ProductDocument = RxDocument<ProductDocType, ProductDocMethods>;
 
 export type ProductCollectionMethods = {
-  countAllProducts: () => Promise<number>;
   listAllProducts: () => BehaviorSubject<ProductDocument[]>;
   insertProduct: (p: ProductDocument) => Promise<ProductDocument>;
   updateProduct: (p: ProductDocument) => Promise<ProductDocument>;
@@ -61,7 +60,7 @@ export type PriceDocument = RxDocument<PriceDocType, PriceDocMethods>;
 export type PriceCollectionMethods = {
   insertPrice: (p: PriceDocument) => Promise<PriceDocument>;
   generatePriceId: () => string;
-  getProductPrices: (p: ProductDocument) => Promise<PriceDocument[]>; 
+  getProductPrices: (p: ProductDocument) => Promise<PriceDocument[]>;
 };
 
 export type PriceCollection = RxCollection<
