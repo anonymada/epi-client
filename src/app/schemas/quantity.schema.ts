@@ -22,8 +22,7 @@ export const quantitySchemaLiteral = {
       type: 'number',
     },
     quantityRegisteredDate: {
-      type: 'string',
-      format: 'date-time',
+      type: 'number',
     },
   },
   attachments: {

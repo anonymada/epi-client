@@ -5,7 +5,7 @@ import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
 import { RxDBMigrationPlugin } from 'rxdb/plugins/migration-schema';
 import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments';
 import {
   Database,
@@ -35,14 +35,13 @@ addRxPlugin(RxDBMigrationPlugin);
 addRxPlugin(RxDBQueryBuilderPlugin);
 
 const ID_PARTS = 4;
-const DATE_NOW = formatDate(Date.now(), 'yyyy-MM-dd HH:mm:ss', 'en');
+const DATE_NOW = Date.now();
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatabaseService {
   static dbPromise: Promise<Database>;
-  private productCountSubject = new BehaviorSubject(0); // Comportement sujet pour le compte des produits
 
   constructor() {}
 
@@ -165,6 +164,7 @@ export class DatabaseService {
           {}
         ) as QuantityDocument;
         Q.quantityRegisteredDate = DATE_NOW;
+        console.log(Q);
         return this.insert(Q);
       },
 
@@ -184,18 +184,18 @@ export class DatabaseService {
         this: QuantityCollection,
         p: ProductDocument
       ): Promise<QuantityDocument[]> {
-        return this.find()
+        const query = this.find()
           .where('idProduct')
           .eq(p.idProduct)
-          .sort('quantityRegisteredDate')
-          .exec();
+          .sort('quantityRegisteredDate');
+        return firstValueFrom(query.$);
       },
     };
 
     const priceDocMethods: PriceDocMethods = {};
 
     const priceCollectionMethods: PriceCollectionMethods = {
-      insertPrice: function (
+      insertPrice: async function (
         this: PriceCollection,
         p: PriceDocument
       ): Promise<PriceDocument> {
@@ -204,6 +204,7 @@ export class DatabaseService {
           {}
         ) as PriceDocument;
         P.priceRegisteredDate = DATE_NOW;
+        console.log(P);
         return this.insert(P);
       },
 
@@ -223,11 +224,11 @@ export class DatabaseService {
         this: PriceCollection,
         p: ProductDocument
       ): Promise<PriceDocument[]> {
-        return this.find()
+        const query = this.find()
           .where('idProduct')
           .eq(p.idProduct)
-          .sort('priceRegisteredDate')
-          .exec();
+          .sort('priceRegisteredDate');
+        return firstValueFrom(query.$);
       },
     };
 

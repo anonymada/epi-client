@@ -22,8 +22,7 @@ export const priceSchemaLiteral = {
       type: 'number',
     },
     priceRegisteredDate: {
-      type: 'string',
-      format: 'date-time',
+      type: 'number',
     },
   },
   attachments: {

@@ -55,8 +55,8 @@ export class ProductCardComponent implements OnInit {
   @Output() shortPress = new EventEmitter();
   @Output() longPress = new EventEmitter();
   db: any;
-  sellingPrice: string = '0';
-  stockQuantity: string = '0';
+  sellingPrice: number = 0;
+  stockQuantity: number = 0;
 
   productImage: string = '../../../assets/images/products.png';
   selectedCard: boolean = false;
@@ -71,14 +71,16 @@ export class ProductCardComponent implements OnInit {
     this.selectedCard = false;
 
     //le dernier prix enregistré
-    this.db.prices.getProductPrices(this.item).then((P: any) => {
-      this.sellingPrice = P[P.length - 1]._data['sellingPrice'];
-    });
+    this.sellingPrice = (await this.db.prices.getProductPrices(this.item))[
+      (await this.db.prices.getProductPrices(this.item)).length - 1
+    ]['sellingPrice'];
 
     //la dernière quantité en stock
-    this.db.quantities.getProductQuantities(this.item).then((P: any) => {
-      this.stockQuantity = P[P.length - 1]._data['stockQuantity'];
-    });
+    this.stockQuantity = (
+      await this.db.quantities.getProductQuantities(this.item)
+    )[(await this.db.quantities.getProductQuantities(this.item)).length - 1][
+      'stockQuantity'
+    ];
   }
 
   onPress() {

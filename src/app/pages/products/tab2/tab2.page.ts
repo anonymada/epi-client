@@ -45,7 +45,8 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class Tab2Page {
   productsNumber: number = 0;
-  productsMarketValue: number = 0;
+  stockValue: number = 0;
+  meanProfitMargin: number = 0;
   priceChart: any;
   stockChart: any;
   db: any;
@@ -61,7 +62,8 @@ export class Tab2Page {
       .listAllProducts()
       .subscribe(async (p: ProductDocument[]) => {
         this.productsNumber = p.length;
-        this.productsMarketValue = await this.calculateProductsMarketValue(p);
+        this.stockValue = await this.calculateStockValue(p);
+        this.meanProfitMargin = await this.calculateMeanProfitMargin(p);
       });
 
     this.createPriceChart();
@@ -125,14 +127,14 @@ export class Tab2Page {
   }
 
   //calculate the total amount of stock
-  async calculateProductsMarketValue(p: ProductDocument[]): Promise<number> {
+  async calculateStockValue(p: ProductDocument[]): Promise<number> {
     const result = await Promise.all(
       p.map(
         async (product) =>
           (
             await this.db.prices.getProductPrices(product)
           )[(await this.db.prices.getProductPrices(product)).length - 1][
-            'sellingPrice'
+            'buyingPrice'
           ] *
           (
             await this.db.quantities.getProductQuantities(product)
@@ -142,5 +144,35 @@ export class Tab2Page {
       )
     );
     return result.reduce((acc, num) => acc + num, 0);
+  }
+
+  //calculate the mean of prfit margin
+  async calculateMeanProfitMargin(p: ProductDocument[]): Promise<number> {
+    const result = await Promise.all(
+      p.map(
+        async (product) =>
+          (((
+            await this.db.prices.getProductPrices(product)
+          )[(await this.db.prices.getProductPrices(product)).length - 1][
+            'sellingPrice'
+          ] -
+            (
+              await this.db.prices.getProductPrices(product)
+            )[(await this.db.prices.getProductPrices(product)).length - 1][
+              'buyingPrice'
+            ]) /
+            (
+              await this.db.prices.getProductPrices(product)
+            )[(await this.db.prices.getProductPrices(product)).length - 1][
+              'sellingPrice'
+            ]) *
+          100
+      )
+    );
+    const resultPercent =
+      result.length === 0
+        ? 0
+        : Math.ceil(result.reduce((acc, num) => acc + num, 0) / result.length);
+    return resultPercent;
   }
 }

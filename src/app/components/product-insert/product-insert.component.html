@@ -338,12 +338,19 @@
       <ion-row>
         <ion-col class="ion-text-center">
           <ion-button
+            id="open-loading"
             type="submit"
             [disabled]="!productForm.valid"
             color="primary"
           >
             {{ "GLOBAL.SAVE" | translate }}
           </ion-button>
+          <ion-loading
+            trigger="open-loading"
+            message="Loading..."
+            [duration]="3000"
+            spinner="circles"
+          ></ion-loading>
         </ion-col>
       </ion-row>
     </ion-grid>

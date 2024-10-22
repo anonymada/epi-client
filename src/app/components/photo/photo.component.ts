@@ -34,9 +34,9 @@ export class PhotoComponent {
       promptLabelPhoto: 'Gallerie',
       promptLabelPicture: 'Appareil photo',
       promptLabelCancel: 'Annuler',
-      quality: 200,
-      height: 100,
-      width: 100,
+      quality: 100,
+      height: 75,
+      width: 75,
     })
       .then((photo) => {
         this.newPhoto.emit(photo.dataUrl);

@@ -1,13 +1,13 @@
 <ion-content [fullscreen]="true">
-  <ion-grid>
+  <ion-grid class="ion-no-margin">
     <!-- Carte pour le total des produits -->
     <ion-row>
       <ion-col>
         <ion-card>
           <ion-card-header>
-            <ion-card-title> {{'PRODUCT.PRODUCTS'| translate}} </ion-card-title>
+            <ion-card-title>{{'PRODUCT.PRODUCTS'| translate}}</ion-card-title>
           </ion-card-header>
-          <ion-card-content>
+          <ion-card-content class="ion-text-center">
             <h1>{{ productsNumber }}</h1>
           </ion-card-content>
         </ion-card>
@@ -16,13 +16,25 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title>
-              {{'PRODUCT.MARKETVALUE'| translate}}
+              {{'PRODUCT.MEANPROFITMARGIN'| translate}}
             </ion-card-title>
           </ion-card-header>
-          <ion-card-content>
-            <h1>
-              {{productsMarketValue | currency : "Ar " : "symbol" : "1.0-0"}}
-            </h1>
+          <ion-card-content class="ion-text-center">
+            <h1>{{ meanProfitMargin }} %</h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding">
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{'PRODUCT.STOCKVALUE'| translate}}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <h1>{{stockValue | currency : "Ar " : "symbol" : "1.0-0"}}</h1>
           </ion-card-content>
         </ion-card>
       </ion-col>

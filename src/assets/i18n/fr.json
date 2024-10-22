@@ -78,7 +78,7 @@
     "CONDITIONNINGTYPE": "Conditionnement",
     "DESCRIPTION": "Description",
     "INSTOCK": "En stock",
-    "MARKETVALUE": "Valeur",
+    "MEANPROFITMARGIN": "Marge Moyenne",
     "NAME": "Nom",
     "PRICE": "Prix",
     "PRODUCTS": "Produits",
@@ -87,6 +87,7 @@
     "SELLINGPRICE": "Vente",
     "SOLDQUANTITY": "Vendue",
     "STOCKQUANTITY": "Stockée",
+    "STOCKVALUE": "Valeur des stocks",
     "SUPPLYQUANTITY": "Commandée",
     "TOTALNUMBER": "Produits"
   }

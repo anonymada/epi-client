@@ -78,7 +78,7 @@
     "CONDITIONNINGTYPE": "Famarana",
     "DESCRIPTION": "Famaritana",
     "INSTOCK": "Tahiry",
-    "MARKETVALUE": "Vidiny",
+    "MEANPROFITMARGIN": "Tombony ankapobeiny",
     "NAME": "Anarana",
     "PRICE": "Vidiny",
     "PRODUCTS": "Entana",
@@ -87,6 +87,7 @@
     "SELLINGPRICE": "Famarotana",
     "SOLDQUANTITY": "Lafo",
     "STOCKQUANTITY": "Tahiry",
+    "STOCKVALUE": "Sandan'ny tahiry",
     "SUPPLYQUANTITY": "Vinidy",
     "TOTALNUMBER": "Entana"
   }
