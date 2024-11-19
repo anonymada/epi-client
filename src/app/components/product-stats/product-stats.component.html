@@ -1,0 +1,75 @@
+<ion-header class="ion-no-border" [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-button
+      slot="start"
+      type="button"
+      color="dark"
+      fill="clear"
+      (click)="close()"
+    >
+      <ion-icon size="large" name="arrow-back" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-title class="ion-text-center">
+      {{ item.name }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-grid class="ion-no-margin">
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title class="ion-text-wrap">
+              {{ "PRODUCT.PROFITMARGIN" | translate }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <h1>{{ profitMarginPercent }} %</h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{ "PRODUCT.PROFITMARGIN" | translate }}</ion-card-title
+            >
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <h1></h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding">
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{ "PRODUCT.STOCKVALUE" | translate }}</ion-card-title
+            >
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <h1>
+              {{ productStockValue | currency : "Ar " : "symbol" : "1.0-0" }}
+            </h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Évolution des Prix</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas id="productSellingChart"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

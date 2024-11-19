@@ -36,6 +36,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "animate.css": "^4.1.1",
     "chart.js": "^4.4.4",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "flag-icons": "^7.2.3",
     "ionic4-auto-complete": "^2.9.9",

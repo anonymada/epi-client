@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   IonCard,
   IonCardContent,
@@ -43,7 +43,7 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
   ],
 })
-export class Tab2Page {
+export class Tab2Page implements OnInit {
   productsNumber: number = 0;
   stockValue: number = 0;
   meanProfitMargin: number = 0;

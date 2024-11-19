@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DatabaseService } from 'src/app/services/database.service';
 import {
   FormGroup,
@@ -6,7 +7,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { calculator, trashBin, arrowBack } from 'ionicons/icons';
+import {
+  calculator,
+  trashBin,
+  arrowBack,
+  barChart,
+  barChartOutline,
+} from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import {
   IonInput,
@@ -39,7 +46,6 @@ import {
   IonCard,
   IonNote,
 } from '@ionic/angular/standalone';
-import { CommonModule, formatDate } from '@angular/common';
 import {
   PriceDocument,
   ProductDocument,
@@ -50,6 +56,7 @@ import { PhotoComponent } from '../photo/photo.component';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductStatsComponent } from '../product-stats/product-stats.component';
 @Component({
   selector: 'app-product-insert',
   templateUrl: './product-insert.component.html',
@@ -113,9 +120,11 @@ export class ProductInsertComponent implements OnInit {
     private databaseService: DatabaseService,
     private formBuilder: FormBuilder,
     private editModalController: ModalController,
+    private statsModalController: ModalController,
+
     private http: HttpClient
   ) {
-    addIcons({ arrowBack, calculator, trashBin });
+    addIcons({ arrowBack, calculator, trashBin, barChartOutline, barChart });
 
     this.initializeForms();
   }
@@ -327,5 +336,16 @@ export class ProductInsertComponent implements OnInit {
       supplyQuantity: 0,
       soldQuantity: 0,
     });
+  }
+
+  async showProductStats(product: ProductDocument) {
+    const editModal = await this.statsModalController.create({
+      component: ProductStatsComponent,
+      componentProps: {
+        item: product,
+        isAdd: false,
+      },
+    });
+    editModal.present();
   }
 }

@@ -25,11 +25,7 @@ import {
   IonSearchbar,
   IonSkeletonText,
 } from '@ionic/angular/standalone';
-import {
-  PriceDocument,
-  ProductDocument,
-  QuantityDocument,
-} from 'src/app/types/app.types';
+import { ProductDocument } from 'src/app/types/app.types';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductInsertComponent } from '../product-insert/product-insert.component';
 import { addIcons } from 'ionicons';
@@ -41,11 +37,11 @@ import { trashBin } from 'ionicons/icons';
   styleUrls: ['./products-list.component.scss'],
   standalone: true,
   imports: [
-    IonSkeletonText,
     CommonModule,
     FormsModule,
     NgPipesModule,
     IonSearchbar,
+    IonSkeletonText,
     IonButton,
     IonContent,
     IonFab,
@@ -94,8 +90,6 @@ export class ProductsListComponent implements OnInit {
       component: ProductInsertComponent,
       componentProps: {
         item: product,
-        itemPrice: '',
-        itemQuantity: '',
         isAdd: false,
       },
     });

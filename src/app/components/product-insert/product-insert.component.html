@@ -369,5 +369,16 @@
     >
       <ion-icon name="trash-bin"> </ion-icon>
     </ion-button>
+    <ion-button
+      size="large"
+      slot="start"
+      type="button"
+      fill="clear"
+      color="dark"
+      (click)="showProductStats(item)"
+      *ngIf="!isAdd"
+    >
+      <ion-icon name="bar-chart-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-footer>

@@ -1,0 +1,44 @@
+canvas {
+  width: 100% !important;
+  height: 300px !important;
+}
+
+ion-content {
+  --padding-top: 56px; /* Ajustez selon la hauteur de votre header */
+}
+
+/* Style général des cartes */
+ion-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 16px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  align-content: center;
+}
+
+ion-card-header {
+  padding-top: 0%;
+  margin-top: 0%;
+}
+ion-card-title {
+  align-content: center;
+  white-space: nowrap;
+  color: #2e2d2d; /* Couleur grise pour rendre le titre moins visible */
+}
+
+ion-card-content h1 {
+  white-space: nowrap; /* Pas de retour à la ligne */
+  overflow: hidden; /* Cache le texte qui dépasse */
+  text-overflow: ellipsis; /* Ajoute "..." si le texte est trop long */
+  max-width: 100%; /* Le texte reste dans la largeur du conteneur */
+  font-size: calc(30px + 1vw); /* Ajustement dynamique de la taille du texte */
+  color: #3b5998;
+  font-weight: bold;
+}
+
+/* Effet de survol (hover) */
+ion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
