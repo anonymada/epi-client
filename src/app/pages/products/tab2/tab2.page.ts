@@ -62,7 +62,10 @@ export class Tab2Page {
       .subscribe(async (p: ProductDocument[]) => {
         this.productsNumber = p.length;
         this.productsMarketValue = await this.calculateProductsMarketValue(p);
+        console.log('log in accueil ', p);
       });
+
+      
 
     this.createPriceChart();
     this.createStockChart();
