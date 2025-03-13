@@ -9,7 +9,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "compodoc": "npx compodoc -p tsconfig.app.json",
+    "compodoc:serve": "npx compodoc -p tsconfig.app.json -s",
+    "storybook": "ng run app:storybook",
+    "build-storybook": "ng run app:build-storybook"
   },
   "private": true,
   "dependencies": {
@@ -44,6 +48,7 @@
     "ngx-pipes": "^3.2.2",
     "rxdb": "^15.34.1",
     "rxjs": "~7.8.0",
+    "tsenako": "file:",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },
@@ -58,7 +63,16 @@
     "@angular/compiler-cli": "^17.0.2",
     "@angular/language-service": "^17.0.2",
     "@capacitor/cli": "6.0.0",
+    "@chromatic-com/storybook": "^3.2.5",
+    "@compodoc/compodoc": "^1.1.26",
     "@ionic/angular-toolkit": "^11.0.1",
+    "@storybook/addon-docs": "^8.6.4",
+    "@storybook/addon-essentials": "^8.6.4",
+    "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/addon-onboarding": "^8.6.4",
+    "@storybook/angular": "^8.6.4",
+    "@storybook/blocks": "^8.6.4",
+    "@storybook/test": "^8.6.4",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
@@ -66,6 +80,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",
     "eslint-plugin-prefer-arrow": "1.2.2",
+    "eslint-plugin-storybook": "^0.11.4",
     "jasmine-core": "~5.1.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.4.0",
@@ -73,6 +88,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "storybook": "^8.6.4",
     "typescript": "~5.2.2"
   },
   "description": "An Ionic project",

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { DatabaseService } from 'src/app/services/database.service';
 import { addIcons } from 'ionicons';
 import { arrowBack } from 'ionicons/icons';
 import {
-  IonModal,
   ModalController,
   IonIcon,
   IonButton,
@@ -19,7 +19,8 @@ import {
   IonCardHeader,
   IonCardContent,
   IonCardTitle,
-  IonCardSubtitle,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { ProductDocument } from 'src/app/types/app.types';
 import { TranslateModule } from '@ngx-translate/core';
@@ -34,7 +35,6 @@ import 'chartjs-adapter-date-fns';
   imports: [
     CommonModule,
     TranslateModule,
-    IonModal,
     IonIcon,
     IonButton,
     IonToolbar,
@@ -48,15 +48,19 @@ import 'chartjs-adapter-date-fns';
     IonCardContent,
     IonCardHeader,
     IonCardTitle,
-    IonCardSubtitle,
+    IonSelect,
+    IonSelectOption,
+    FormsModule,
   ],
 })
 export class ProductStatsComponent implements OnInit {
   @Input() item!: ProductDocument;
   profitMarginPercent: number = 0;
   productStockValue: number = 0;
-  productSellingChart: any;
+  productChart: any;
+  stockQuantity: number = 0;
   db: any;
+  selectedValue = 'soldQuantity';
 
   constructor(
     private statsModalController: ModalController,
@@ -73,30 +77,49 @@ export class ProductStatsComponent implements OnInit {
     this.profitMarginPercent = await this.calulateProfitMarginPercent(
       this.item
     );
-    this.db.prices.getProductPrices(this.item).then(async (p: any) => {
-      const productSellingX = await p.map((P: { [x: string]: any }) =>
-        this.formatDateFromTimestamp(P['priceRegisteredDate'])
-      );
-      const productSellingY = await p.map(
-        (P: { [x: string]: any }) => P['sellingPrice']
-      );
-      console.log(productSellingX);
-      console.log(productSellingY);
-      this.createPriceChart(productSellingX, productSellingY);
-    });
+
+    //la dernière quantité en stock
+    this.stockQuantity = (
+      await this.db.quantities.getProductQuantities(this.item)
+    )[(await this.db.quantities.getProductQuantities(this.item)).length - 1][
+      'stockQuantity'
+    ];
   }
 
   close() {
     this.statsModalController.dismiss(null, 'cancel');
   }
 
-  // Création du graphique d'évolution des prix
-  createPriceChart(X: any, Y: any) {
-    const ctx = document.getElementById(
-      'productSellingChart'
-    ) as HTMLCanvasElement;
+  displayChartChange(event: CustomEvent) {
+    if (event.detail.value === 'price') {
+      this.db.prices.getProductPrices(this.item).then(async (p: any) => {
+        const x = await p.map((P: { [x: string]: any }) =>
+          this.formatDateFromTimestamp(P['priceRegisteredDate'])
+        );
+        const y = await p.map((P: { [x: string]: any }) => P['sellingPrice']);
+        this.createChart(x, y);
+      });
+    }
+    if (event.detail.value === 'soldQuantity') {
+      this.db.quantities
+        .getProductQuantities(this.item)
+        .then(async (p: any) => {
+          const x = await p.map((P: { [x: string]: any }) =>
+            this.formatDateFromTimestamp(P['quantityRegisteredDate'])
+          );
+          const y = await p.map((P: { [x: string]: any }) => P['soldQuantity']);
 
-    this.productSellingChart = new Chart(ctx, {
+          this.createChart(x, y);
+        });
+    }
+  }
+  // Création du graphique d'évolution
+  createChart(X: any, Y: any) {
+    const ctx = document.getElementById('productChart') as HTMLCanvasElement;
+    if (this.productChart) {
+      this.productChart.destroy();
+    }
+    this.productChart = new Chart(ctx, {
       type: 'line', // Type de graphique (ici une courbe)
       data: {
         labels: X,
@@ -108,6 +131,7 @@ export class ProductStatsComponent implements OnInit {
         ],
       },
       options: {
+        responsive: true,
         scales: {
           x: {
             type: 'time', // Type d'axe temporel
@@ -117,17 +141,9 @@ export class ProductStatsComponent implements OnInit {
                 day: 'MMM d', // Format affiché sur l'axe des abscisses
               },
             },
-            title: {
-              display: true,
-              text: 'Dates',
-            },
           },
           y: {
             beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Valeurs',
-            },
           },
         },
       },

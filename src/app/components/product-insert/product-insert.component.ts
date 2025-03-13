@@ -18,10 +18,8 @@ import { addIcons } from 'ionicons';
 import {
   IonInput,
   IonButton,
-  IonModal,
   IonHeader,
   IonToolbar,
-  IonButtons,
   IonTitle,
   IonContent,
   IonIcon,
@@ -38,13 +36,6 @@ import {
   IonItem,
   IonLabel,
   IonPopover,
-  IonSelect,
-  IonSelectOption,
-  IonDatetimeButton,
-  IonDatetime,
-  IonCardSubtitle,
-  IonCard,
-  IonNote,
 } from '@ionic/angular/standalone';
 import {
   PriceDocument,
@@ -63,11 +54,6 @@ import { ProductStatsComponent } from '../product-stats/product-stats.component'
   styleUrls: ['./product-insert.component.scss'],
   standalone: true,
   imports: [
-    IonNote,
-    IonCard,
-    IonCardSubtitle,
-    IonDatetime,
-    IonDatetimeButton,
     IonPopover,
     IonLabel,
     IonItem,
@@ -78,17 +64,13 @@ import { ProductStatsComponent } from '../product-stats/product-stats.component'
     IonCol,
     IonRow,
     IonGrid,
-    IonSelect,
-    IonSelectOption,
     IonThumbnail,
     IonLoading,
     IonIcon,
     IonContent,
     IonTitle,
-    IonButtons,
     IonToolbar,
     IonHeader,
-    IonModal,
     IonButton,
     IonInput,
     TranslateModule,
@@ -111,10 +93,11 @@ export class ProductInsertComponent implements OnInit {
   productCategory: string[] = [];
   productConditionningType: string[] = [];
   private productImageEl!: HTMLImageElement;
-  productImageBase64String: string = '';
   private productImageType: string = 'text/plain';
+  productImageBase64String: string = '';
   uniteMonetaire: string = '[Ariary]';
   db: any;
+  isAddingCategory = false;
 
   constructor(
     private databaseService: DatabaseService,
@@ -132,6 +115,7 @@ export class ProductInsertComponent implements OnInit {
   async ngOnInit() {
     this.db = await this.databaseService.get();
     this.productCategory = this.db.products.getAllCategories();
+    console.log(this.productCategory);
     this.productConditionningType = this.db.products.getAllConditionningType();
 
     // populate all fields with database data (edit)
@@ -198,6 +182,51 @@ export class ProductInsertComponent implements OnInit {
     }
   }
 
+  async calculateField(ev: any, el: string) {
+    if (el == 'buyingPrice') {
+      this.productForm.get('buyingPrice')?.setValue(ev);
+    }
+    if (el == 'sellingPrice') {
+      this.productForm.get('sellingPrice')?.setValue(ev);
+    }
+  }
+
+  calculateProfitMargin(e: any) {
+    if (
+      this.productForm.get('sellingPrice')?.value != 0 ||
+      this.productForm.get('buyingPrice')?.value != 0
+    ) {
+      this.productForm
+        .get('profitMargin')
+        ?.setValue(
+          this.productForm.get('sellingPrice')?.value -
+            this.productForm.get('buyingPrice')?.value
+        );
+    } else {
+      this.productForm.get('profitMargin')?.setValue(0);
+    }
+  }
+
+  calculateSoldQuantity(e: any) {
+    if (
+      this.productForm.get('supplyQuantity')?.value != 0 ||
+      this.productForm.get('stockQuantity')?.value != 0
+    ) {
+      this.productForm
+        .get('soldQuantity')
+        ?.setValue(
+          this.productForm.get('supplyQuantity')?.value -
+            this.productForm.get('stockQuantity')?.value
+        );
+    } else {
+      this.productForm.get('soldQuantity')?.setValue(0);
+    }
+  }
+
+  close() {
+    this.editModalController.dismiss(null, 'cancel');
+  }
+
   async save() {
     if (this.isAdd) {
       if (this.productImageBase64String != '') {
@@ -246,57 +275,12 @@ export class ProductInsertComponent implements OnInit {
     });
   }
 
-  async calculateField(ev: any, el: string) {
-    if (el == 'buyingPrice') {
-      this.productForm.get('buyingPrice')?.setValue(ev);
-    }
-    if (el == 'sellingPrice') {
-      this.productForm.get('sellingPrice')?.setValue(ev);
-    }
-  }
-
-  calculateProfitMargin(e: any) {
-    if (
-      this.productForm.get('sellingPrice')?.value != 0 ||
-      this.productForm.get('buyingPrice')?.value != 0
-    ) {
-      this.productForm
-        .get('profitMargin')
-        ?.setValue(
-          this.productForm.get('sellingPrice')?.value -
-            this.productForm.get('buyingPrice')?.value
-        );
-    } else {
-      this.productForm.get('profitMargin')?.setValue(0);
-    }
-  }
-
-  calculateStockQuantity(e: any) {
-    if (
-      this.productForm.get('supplyQuantity')?.value != 0 ||
-      this.productForm.get('soldQuantity')?.value != 0
-    ) {
-      this.productForm
-        .get('stockQuantity')
-        ?.setValue(
-          this.productForm.get('supplyQuantity')?.value -
-            this.productForm.get('soldQuantity')?.value
-        );
-    } else {
-      this.productForm.get('stockQuantity')?.setValue(0);
-    }
-  }
-
   changePhoto(imageBase64: any) {
     this.productImageEl = document.getElementById(
       'productImageElt'
     ) as HTMLImageElement;
     this.productImageEl.src = imageBase64;
     this.productImageBase64String = imageBase64;
-  }
-
-  close() {
-    this.editModalController.dismiss(null, 'cancel');
   }
 
   getBase64DefaultProductImage() {
@@ -323,9 +307,9 @@ export class ProductInsertComponent implements OnInit {
       buyingPrice: ['', [Validators.required]],
       sellingPrice: ['', [Validators.required]],
       profitMargin: [{ value: '', disabled: true }],
-      stockQuantity: [{ value: '', disabled: true }],
+      soldQuantity: [{ value: '', disabled: true }],
       supplyQuantity: ['', [Validators.required]],
-      soldQuantity: ['', [Validators.required]],
+      stockQuantity: ['', [Validators.required]],
     });
 
     this.productForm.patchValue({

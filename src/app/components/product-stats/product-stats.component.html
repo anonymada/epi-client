@@ -21,11 +21,11 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title class="ion-text-wrap">
-              {{ "PRODUCT.PROFITMARGIN" | translate }}
+              {{ "PRODUCT.STOCKQUANTITY" | translate }}
             </ion-card-title>
           </ion-card-header>
           <ion-card-content class="ion-text-center">
-            <h1>{{ profitMarginPercent }} %</h1>
+            <h1>{{ stockQuantity }}</h1>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -33,8 +33,8 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title>
-              {{ "PRODUCT.PROFITMARGIN" | translate }}</ion-card-title
-            >
+              {{ "PRODUCT.SOLDQUANTITY" | translate }}
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content class="ion-text-center">
             <h1></h1>
@@ -42,31 +42,33 @@
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row class="ion-no-padding">
-      <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              {{ "PRODUCT.STOCKVALUE" | translate }}</ion-card-title
-            >
-          </ion-card-header>
-          <ion-card-content class="ion-text-center">
-            <h1>
-              {{ productStockValue | currency : "Ar " : "symbol" : "1.0-0" }}
-            </h1>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
     <ion-row>
       <ion-col>
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Évolution des Prix</ion-card-title>
+            <ion-card-title>
+              {{ "PRODUCT.EVOLUTION" | translate }}
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <canvas id="productSellingChart"></canvas>
+            <ion-select
+              interface="popover"
+              label-placement="floating"
+              fill="outline"
+              [(ngModel)]="selectedValue"
+              (ionChange)="displayChartChange($event)"
+            >
+              <ion-select-option value="price">
+                {{ "PRODUCT.PRICE" | translate }}
+              </ion-select-option>
+              <ion-select-option value="soldQuantity">
+                {{ "PRODUCT.QUANTITY" | translate }}
+                {{ "PRODUCT.SOLDQUANTITY" | translate }}
+              </ion-select-option>
+            </ion-select>
+            <ion-card>
+              <canvas id="productChart"></canvas>
+            </ion-card>
           </ion-card-content>
         </ion-card>
       </ion-col>

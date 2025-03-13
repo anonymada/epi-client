@@ -77,6 +77,7 @@
     "CATEGORY": "Catégorie",
     "CONDITIONNINGTYPE": "Conditionnement",
     "DESCRIPTION": "Description",
+    "EVOLUTION": "Evolution",
     "INSTOCK": "En stock",
     "MEANPROFITMARGIN": "Marge Moyenne",
     "NAME": "Nom",
@@ -86,9 +87,9 @@
     "QUANTITY": "Quantité",
     "SELLINGPRICE": "Vente",
     "SOLDQUANTITY": "Vendue",
-    "STOCKQUANTITY": "Stockée",
+    "STOCKQUANTITY": "En stock",
     "STOCKVALUE": "Valeur des stocks",
-    "SUPPLYQUANTITY": "Commandée",
+    "SUPPLYQUANTITY": "Commandée ",
     "TOTALNUMBER": "Produits"
   }
 }

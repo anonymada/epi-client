@@ -70,3 +70,4 @@ testem.log
 Thumbs.db
 
 resources/android/**/*
+*storybook.log
