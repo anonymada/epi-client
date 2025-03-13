@@ -30,6 +30,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductInsertComponent } from '../product-insert/product-insert.component';
 import { addIcons } from 'ionicons';
 import { trashBin } from 'ionicons/icons';
+import { ProductStatsComponent } from '../product-stats/product-stats.component';
 
 @Component({
   selector: 'app-products-list',
@@ -42,13 +43,8 @@ import { trashBin } from 'ionicons/icons';
     NgPipesModule,
     IonSearchbar,
     IonSkeletonText,
-    IonButton,
-    IonContent,
     IonFab,
     IonFabButton,
-    IonFabList,
-    IonItem,
-    IonLabel,
     IonCardContent,
     IonCardSubtitle,
     IonCardTitle,
@@ -58,9 +54,7 @@ import { trashBin } from 'ionicons/icons';
     IonRow,
     IonGrid,
     IonIcon,
-    IonSpinner,
     ProductCardComponent,
-    ProductInsertComponent,
   ],
 })
 export class ProductsListComponent implements OnInit {
@@ -73,7 +67,8 @@ export class ProductsListComponent implements OnInit {
 
   constructor(
     private databaseService: DatabaseService,
-    private editModalController: ModalController
+    private editModalController: ModalController,
+    private statsModalController: ModalController
   ) {
     addIcons({ trashBin });
   }
@@ -85,9 +80,9 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
-  async showEditProduct(product: ProductDocument) {
-    const editModal = await this.editModalController.create({
-      component: ProductInsertComponent,
+  async showProductStats(product: ProductDocument) {
+    const editModal = await this.statsModalController.create({
+      component: ProductStatsComponent,
       componentProps: {
         item: product,
         isAdd: false,

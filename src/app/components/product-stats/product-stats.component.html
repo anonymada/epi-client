@@ -56,22 +56,45 @@
               label-placement="floating"
               fill="outline"
               [(ngModel)]="selectedValue"
-              (ionChange)="displayChartChange($event)"
+              (ionChange)="displayEvolutionChart($event)"
             >
-              <ion-select-option value="price">
+              <ion-select-option value="buyingPrice">
                 {{ "PRODUCT.PRICE" | translate }}
+                {{ "PRODUCT.BUYINGPRICE" | translate }}
               </ion-select-option>
               <ion-select-option value="soldQuantity">
                 {{ "PRODUCT.QUANTITY" | translate }}
                 {{ "PRODUCT.SOLDQUANTITY" | translate }}
               </ion-select-option>
             </ion-select>
-            <ion-card>
-              <canvas id="productChart"></canvas>
-            </ion-card>
+            <canvas id="productChart"></canvas>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-button
+      size="large"
+      slot="end"
+      type="button"
+      fill="clear"
+      color="dark"
+      (click)="delete(item)"
+    >
+      <ion-icon name="trash-bin"> </ion-icon>
+    </ion-button>
+    <ion-button
+      size="large"
+      slot="start"
+      type="button"
+      fill="clear"
+      color="dark"
+      (click)="showEditProduct(item)"
+    >
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

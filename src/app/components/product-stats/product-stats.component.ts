@@ -3,7 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { DatabaseService } from 'src/app/services/database.service';
 import { addIcons } from 'ionicons';
-import { arrowBack } from 'ionicons/icons';
+import {
+  arrowBack,
+  trashBin,
+  barChartOutline,
+  createOutline,
+} from 'ionicons/icons';
 import {
   ModalController,
   IonIcon,
@@ -21,11 +26,13 @@ import {
   IonCardTitle,
   IonSelect,
   IonSelectOption,
+  IonFooter,
 } from '@ionic/angular/standalone';
 import { ProductDocument } from 'src/app/types/app.types';
 import { TranslateModule } from '@ngx-translate/core';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { ProductInsertComponent } from '../product-insert/product-insert.component';
 
 @Component({
   selector: 'app-product-stats',
@@ -33,6 +40,7 @@ import 'chartjs-adapter-date-fns';
   styleUrls: ['./product-stats.component.scss'],
   standalone: true,
   imports: [
+    IonFooter,
     CommonModule,
     TranslateModule,
     IonIcon,
@@ -64,10 +72,11 @@ export class ProductStatsComponent implements OnInit {
 
   constructor(
     private statsModalController: ModalController,
+    private editModalController: ModalController,
     private databaseService: DatabaseService
   ) {
     Chart.register(...registerables);
-    addIcons({ arrowBack });
+    addIcons({ arrowBack, trashBin, createOutline });
   }
 
   async ngOnInit() {
@@ -84,23 +93,46 @@ export class ProductStatsComponent implements OnInit {
     )[(await this.db.quantities.getProductQuantities(this.item)).length - 1][
       'stockQuantity'
     ];
+
+    //afficher le graphique des quantités vendues
+    this.displayEvolutionChart();
   }
 
   close() {
     this.statsModalController.dismiss(null, 'cancel');
   }
 
-  displayChartChange(event: CustomEvent) {
-    if (event.detail.value === 'price') {
-      this.db.prices.getProductPrices(this.item).then(async (p: any) => {
-        const x = await p.map((P: { [x: string]: any }) =>
-          this.formatDateFromTimestamp(P['priceRegisteredDate'])
-        );
-        const y = await p.map((P: { [x: string]: any }) => P['sellingPrice']);
-        this.createChart(x, y);
-      });
-    }
-    if (event.detail.value === 'soldQuantity') {
+  async delete(item: ProductDocument) {
+    this.db.products.deleteProduct(item).then(() => {
+      this.editModalController.dismiss(null, 'cancel');
+    });
+  }
+
+  displayEvolutionChart(event?: CustomEvent) {
+    if (event) {
+      if (event!.detail.value === 'buyingPrice') {
+        this.db.prices.getProductPrices(this.item).then(async (p: any) => {
+          const x = await p.map((P: { [x: string]: any }) =>
+            this.formatDateFromTimestamp(P['priceRegisteredDate'])
+          );
+          const y = await p.map((P: { [x: string]: any }) => P['sellingPrice']);
+          this.createChart(x, y);
+        });
+      } else if (event!.detail.value === 'soldQuantity') {
+        this.db.quantities
+          .getProductQuantities(this.item)
+          .then(async (p: any) => {
+            const x = await p.map((P: { [x: string]: any }) =>
+              this.formatDateFromTimestamp(P['quantityRegisteredDate'])
+            );
+            const y = await p.map(
+              (P: { [x: string]: any }) => P['soldQuantity']
+            );
+
+            this.createChart(x, y);
+          });
+      }
+    } else {
       this.db.quantities
         .getProductQuantities(this.item)
         .then(async (p: any) => {
@@ -150,6 +182,16 @@ export class ProductStatsComponent implements OnInit {
     });
   }
 
+  async showEditProduct(product: ProductDocument) {
+    const editModal = await this.editModalController.create({
+      component: ProductInsertComponent,
+      componentProps: {
+        item: product,
+        isAdd: false,
+      },
+    });
+    editModal.present();
+  }
   async calculateStockValue(p: ProductDocument): Promise<number> {
     const result =
       (await this.db.prices.getProductPrices(p))[

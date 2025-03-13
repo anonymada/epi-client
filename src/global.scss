@@ -34,61 +34,63 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
-@import 'animate.css';
-@import 'node_modules/flag-icons/css/flag-icons.min.css';
+@import "@ionic/angular/css/palettes/dark.system.css";
+@import "animate.css";
+@import "node_modules/flag-icons/css/flag-icons.min.css";
 
-html {
-    --ion-dynamic-font: var(--ion-dynamic-font);
-    --ion-font-family: 'Comic Sans MS';
-    font-size: 100%;
-    
-    @media (max-width: 289px) {
-        font-size: 70%;
-    }
-
-    @media (min-width: 290px) {
-        font-size: 72.5%;
-    }
-
-    @media (min-width: 300px) {
-        font-size: 75.5%;
-    }
-
-    @media (min-width: 320px) {
-        font-size: 77.5%;
-    }
-
-    @media (min-width: 325px) {
-        font-size: 79.5%;
-    }
-
-    @media (min-width: 326px) {
-        font-size: 80.5%;
-    }
-
-    @media (min-width: 330px) {
-        font-size: 82.5%;
-    }
-
-    @media (min-width: 360px) {
-        font-size: 84.5%;
-    }
-
-    @media (min-width: 411px) {
-        font-size: 90%;
-    }
-
-    @media (min-width: 500px) {
-        font-size: 95%;
-    }
-
-    @media (min-width: 720px) {
-        font-size: 100%;
-    }
-
-    @media (min-width: 1000px) {
-        font-size: 110%;
-    }
+ion-content {
+  --background: linear-gradient(to bottom, #d1daee, #bdbdcf);
 }
+html {
+  --ion-dynamic-font: var(--ion-dynamic-font);
+  --ion-font-family: "Comic Sans MS";
+  font-size: 100%;
 
+  @media (max-width: 289px) {
+    font-size: 70%;
+  }
+
+  @media (min-width: 290px) {
+    font-size: 72.5%;
+  }
+
+  @media (min-width: 300px) {
+    font-size: 75.5%;
+  }
+
+  @media (min-width: 320px) {
+    font-size: 77.5%;
+  }
+
+  @media (min-width: 325px) {
+    font-size: 79.5%;
+  }
+
+  @media (min-width: 326px) {
+    font-size: 80.5%;
+  }
+
+  @media (min-width: 330px) {
+    font-size: 82.5%;
+  }
+
+  @media (min-width: 360px) {
+    font-size: 84.5%;
+  }
+
+  @media (min-width: 411px) {
+    font-size: 90%;
+  }
+
+  @media (min-width: 500px) {
+    font-size: 95%;
+  }
+
+  @media (min-width: 720px) {
+    font-size: 100%;
+  }
+
+  @media (min-width: 1000px) {
+    font-size: 110%;
+  }
+}
