@@ -26,7 +26,6 @@ import {
   QuantitySchema,
   DatabaseCollections,
 } from '../types/app.types';
-import { formatDate } from '@angular/common';
 
 addRxPlugin(RxDBAttachmentsPlugin);
 addRxPlugin(RxDBJsonDumpPlugin);
@@ -204,7 +203,6 @@ export class DatabaseService {
           {}
         ) as PriceDocument;
         P.priceRegisteredDate = DATE_NOW;
-        console.log(P);
         return this.insert(P);
       },
 

@@ -63,8 +63,8 @@
             <ion-row>
               <ion-item lines="none" class="ion-no-padding">
                 <ion-col>
-                  <ion-label
-                    >{{ "PRODUCT.CATEGORY" | translate }} * :
+                  <ion-label>
+                    {{ "PRODUCT.CATEGORY" | translate }} * :
                   </ion-label>
                 </ion-col>
                 <ion-col>
@@ -74,7 +74,7 @@
                     fill="outline"
                     formControlName="category"
                   />
-                  <datalist id="categoryList">
+                  <datalist id="categoryList" role="listbox">
                     <option
                       *ngFor="let category of productCategory"
                       [value]="category"
@@ -118,16 +118,12 @@
                     formControlName="conditionningType"
                   />
                   <datalist id="conditionningList">
-                    <select id="select2">
-                      <option
-                        *ngFor="
-                          let conditionningType of productConditionningType
-                        "
-                        [value]="conditionningType"
-                      >
-                        {{ conditionningType }}
-                      </option>
-                    </select>
+                    <option
+                      *ngFor="let conditionningType of productConditionningType"
+                      [value]="conditionningType"
+                    >
+                      {{ conditionningType }}
+                    </option>
                   </datalist>
                 </ion-col>
               </ion-item>
