@@ -1,56 +1,59 @@
 <ion-content [fullscreen]="true">
   <ion-grid class="ion-no-margin">
     <!-- Carte pour le total des produits -->
-    <ion-row>
+
+    <ion-row class="ion-no-padding">
       <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>{{'PRODUCT.PRODUCTS'| translate}}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content class="ion-text-center">
-            <h1>{{ productsNumber }}</h1>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              {{'PRODUCT.MEANPROFITMARGIN'| translate}}
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content class="ion-text-center">
-            <h1>{{ meanProfitMargin }} %</h1>
-          </ion-card-content>
+        <ion-card class="container-stock-value">
+          <div class="stock-value">
+            <p>{{'PRODUCT.STOCKVALUE'| translate}}</p>
+            <h1>{{stockValue | currency : "Ar" : "symbol" : "1.0-0"}}</h1>
+          </div>
+          <div class="stock-detail">
+            <p> {{'PRODUCT.PRODUCTS'| translate}}: <span style="color: #4dff4d;">{{ productsNumber }}</span> </p>
+            <p> {{'PRODUCT.MEANPROFITMARGIN'| translate}}: <span style="color: #ff7c7c;">{{ meanProfitMargin }}%</span></p>
+          </div>
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row class="ion-no-padding">
+    
+    <ion-row>
       <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              {{'PRODUCT.STOCKVALUE'| translate}}
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content class="ion-text-center">
-            <h1>{{stockValue | currency : "Ar " : "symbol" : "1.0-0"}}</h1>
-          </ion-card-content>
-        </ion-card>
+        <!-- liste des produits plus variee du quatite -->
+        <ion-accordion-group>
+          <ion-accordion value="first">
+            <ion-item slot="header">
+              <ion-label>Produit plus vendue</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <app-product-list-grid [items]="topProduct"/>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
       </ion-col>
     </ion-row>
 
     <!-- Carte pour l'évolution des prix -->
     <ion-row>
       <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Évolution des Prix</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <canvas id="priceChart"></canvas>
-          </ion-card-content>
-        </ion-card>
+        <h1>Évolution des Prix</h1>
+        <canvas id="priceChart"></canvas>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <!-- liste croissante de Quantite du stock des produits -->
+        <ion-accordion-group>
+          <ion-accordion value="first">
+            <ion-item slot="header">
+              <ion-label>Stock a verifier</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <app-product-list-flex [items]="downProduct"/>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
       </ion-col>
     </ion-row>
 

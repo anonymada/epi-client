@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import {
   IonCard,
   IonCardContent,
@@ -13,12 +13,21 @@ import {
   IonHeader,
   IonTitle,
   IonContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonAccordion,
+  IonAccordionGroup
 } from '@ionic/angular/standalone';
 import { Chart, registerables } from 'chart.js';
 import { HearderComponent } from '../../../components/hearder/hearder.component';
 import { DatabaseService } from 'src/app/services/database.service';
 import { ProductDocument } from 'src/app/types/app.types';
 import { TranslateModule } from '@ngx-translate/core';
+import { addIcons } from 'ionicons';
+import { arrowForwardOutline, bagHandleOutline, ticketOutline } from 'ionicons/icons';
+import { ProductListGridComponent } from 'src/app/components/product-list-grid/product-list-grid.component';
+import { ProductListFlexComponent } from 'src/app/components/product-list-flex/product-list-flex.component';
 
 @Component({
   selector: 'app-tab2',
@@ -41,6 +50,13 @@ import { TranslateModule } from '@ngx-translate/core';
     HearderComponent,
     TranslateModule,
     CommonModule,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    ProductListGridComponent,
+    ProductListFlexComponent,
+    IonAccordion,
+    IonAccordionGroup
   ],
 })
 export class Tab2Page implements OnInit {
@@ -50,10 +66,13 @@ export class Tab2Page implements OnInit {
   priceChart: any;
   stockChart: any;
   db: any;
+  public topProduct!: ProductDocument[];
+  public downProduct: any;
 
   constructor(private databaseService: DatabaseService) {
     // Enregistrement des composants nécessaires de Chart.js
     Chart.register(...registerables);
+    addIcons({ bagHandleOutline, ticketOutline, arrowForwardOutline });
   }
 
   async ngOnInit() {

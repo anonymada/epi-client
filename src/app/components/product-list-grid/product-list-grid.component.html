@@ -1,0 +1,18 @@
+<div class="variate-product" *ngIf="items; else noItems">
+  <div *ngFor="let item of items">
+    <ion-card>
+      <img src="./assets/icons/products.svg" alt="">
+    </ion-card>
+    <span>product name</span>
+  </div>
+
+  <div>
+    <ion-card>
+      <ion-icon size="large" name="arrow-forward-outline"></ion-icon>
+    </ion-card>
+    <span>Voir plaus</span>
+  </div>
+</div>
+<ng-template #noItems>
+  <i>Rein a afficher !</i>
+</ng-template>

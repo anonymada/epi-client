@@ -1,0 +1,28 @@
+.variate-product {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5%;
+}
+  
+.variate-product > div {
+    text-align: center;
+    width: 20%;
+    min-width: 60px;
+    max-width: 140px;
+    font-size: 8pt;
+    color: #5045E6;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+
+    ion-card {
+        padding: 0;
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-content: center;
+    }
+}
+
+i {
+    color: gray;
+}

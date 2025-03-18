@@ -1,0 +1,9 @@
+<div class="verify-product" *ngIf="items; else noItems">
+  <ion-card *ngFor="let item of items">
+    <img src="./assets/icons/products.svg" alt="">
+    <span>product name <b>22L</b></span>
+  </ion-card>
+</div>
+<ng-template #noItems>
+  <i>Rein a afficher !</i>
+</ng-template>

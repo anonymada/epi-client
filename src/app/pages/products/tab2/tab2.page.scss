@@ -42,3 +42,58 @@ ion-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
+
+.container-stock-value {
+  background: #5045E6;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+
+  .stock-value {
+    h1, p {
+    margin: 0;
+    }
+    h1 {
+      font-size: 20pt;
+      font-weight: bold;
+    }
+  }
+  
+  .stock-detail {
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+    p {
+      background: #ffffff28;
+      padding: 5px;
+      margin: 5px 0 0 0;
+      width: 100%;
+      border-radius: 7px;
+      text-align: center;
+    }
+  }
+}
+
+ion-accordion {
+  margin: 0 auto;
+  padding: 0px;
+  background: transparent;
+}
+
+ion-accordion.accordion-expanding,
+ion-accordion.accordion-expanded {
+  width: calc(100% - 32px);
+  margin: 16px auto;
+}
+
+ion-accordion.accordion-collapsing ion-item[slot="header"],
+ion-accordion.accordion-collapsed ion-item[slot="header"] {
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-light-contrast);
+}
+
+ion-accordion.accordion-expanding ion-item[slot="header"],
+ion-accordion.accordion-expanded ion-item[slot="header"] {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}

@@ -1,0 +1,25 @@
+.verify-product {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2%;
+  overflow-x: auto;
+
+  ion-card {
+    width: 40%;
+    min-width: 120px;
+    aspect-ratio: 3 / 2;
+    position: relative;
+    box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.3);
+
+    span {
+      position: absolute;
+      bottom: 2px;
+      left: 3px;
+      color: white;
+    }
+  }
+}
+
+i {
+  color: gray;
+}
