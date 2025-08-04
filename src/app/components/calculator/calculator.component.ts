@@ -17,6 +17,8 @@ import {
   IonIcon,
   IonInput,
 } from '@ionic/angular/standalone';
+import { MathCalculator } from '../../utils/math-calculator.util';
+import { ErrorHandlingService } from '../../services/error-handling.service';
 
 @Component({
   selector: 'app-calculator',
@@ -40,7 +42,7 @@ export class CalculatorComponent implements OnInit {
   input: any = '';
   result: any;
 
-  constructor() {
+  constructor(private errorHandler: ErrorHandlingService) {
     addIcons({ backspace });
   }
 
@@ -140,8 +142,17 @@ export class CalculatorComponent implements OnInit {
     ) {
       formula = formula.substr(0, formula.length - 1);
     }
-    var indirectEval = eval;
-    this.result = indirectEval(formula);
+    
+    // Utiliser le calculateur sécurisé au lieu d'eval()
+    const calculatedResult = MathCalculator.evaluate(formula);
+    
+    if (calculatedResult !== null) {
+      this.result = calculatedResult;
+    } else {
+      this.errorHandler.handleError('Expression mathématique invalide', 'Calculator');
+      this.result = 0;
+    }
+    
     this.ionInputEl.value = this.input;
   }
 

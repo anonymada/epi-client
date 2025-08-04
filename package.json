@@ -13,7 +13,10 @@
     "compodoc": "npx compodoc -p tsconfig.app.json",
     "compodoc:serve": "npx compodoc -p tsconfig.app.json -s",
     "storybook": "ng run app:storybook",
-    "build-storybook": "ng run app:build-storybook"
+    "build-storybook": "ng run app:build-storybook",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss}\"",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -81,6 +84,9 @@
     "eslint-plugin-jsdoc": "^48.2.1",
     "eslint-plugin-prefer-arrow": "1.2.2",
     "eslint-plugin-storybook": "^0.11.4",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
     "jasmine-core": "~5.1.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.4.0",
